@@ -10,17 +10,28 @@
     </head>
 
     <body>
-        <div class="navbar">
-            <div>
-                <img style="margin-top: 60px;" src="assets/chat_bubble_art.png" alt="Chat bubble art">
+        <div class="onboard">
+            <div class="nav-bar">
+                <img class="back-btn" src="assets/icons/left-arrow.png" alt="Left Arrow">
+                <p class="nav-label">Join a team</p>
             </div>
-            <div id="log-in-content">
-                <button class="continue" onclick="location.href='jointeam.html'">Continue</button>
-                <span id="log-in-small">Already have an account?<a id="log-in-link-small" href="#">Log In</a></span>
+            <div id="teams-div">
+                <p class="onboard-text">
+                    Find your favorite teams and join fellow fans!
+                </p>
             </div>
-        </div>
-        <div>
-
         </div>
     </body>
+
 </html>
+
+<script>
+    var teams = ["Minnesota Vikings", "New York Giants"];
+    for(var i = 0; i < teams.length; i++) {
+        document.getElementById("teams-div").innerHTML += 
+        <button class="team-button" onclick="location.href='jointeam.html'">
+            <p class="team-text">Minnesota Vikings</p>
+            <img src="Minnesota Vikings.png" alt="Minnesota Vikings" width=50px height=50px>
+        </button>
+    }
+</script>
