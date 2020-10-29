@@ -11,6 +11,34 @@ body {
     
 }
 
+.nav-bar {
+    display: flex;
+    height: 56px;
+    vertical-align: center;
+    text-align: center;
+}
+
+.back-btn {
+    width: 24px;
+    height: 24px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 24px;
+}
+
+.nav-label {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin: auto;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 26px;
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: -0.28px;
+    color: #FFFFFF;
+}
+
 #logo-tag {
     margin-top: 130px;
 }
