@@ -14,16 +14,26 @@
         <div class="onboard">
             
             <div class="nav-bar">
-                <img class="back-btn" src="assets/icons/left-arrow.png" alt="Left Arrow">
+                <a class="back-btn" href="index.html"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
                 <p class="nav-label">Create an Account</p>
             </div>
 
             <div>
                 <p class="onboard-text">HotTake is a place for sports fans to share their hottest opinions, interact during live games, and connect with fellow fans.</p>
+                <div>
+                    <form id="create-account-form">
+                        <label>Create a username</label>
+                        <input type="text" class="text-input">
+                        <label>Create a password</label>
+                        <input type="text" class="text-input">
+                        <label>Confirm your password</label>
+                        <input type="text" class="text-input">
+                    </form>
+                </div>
             </div>
 
             <div id="log-in-content">
-                <button class="main-button" onclick="location.href='https://google.com';">Create Account</button>
+                <button class="main-button" onclick="location.href='join.html';">Create Account</button>
             </div>
             
         </div>

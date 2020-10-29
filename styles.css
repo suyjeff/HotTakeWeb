@@ -56,7 +56,7 @@ body {
     /* identical to box height, or 140% */
     letter-spacing: -0.2px;
     border: none;
-    text-align: left;
+    text-align: center;
 }
 
 #log-in-content {
@@ -92,4 +92,28 @@ body {
     letter-spacing: -0.28px;
     color: white;
     text-align: left;
+}
+
+.text-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    border: none;
+    margin-bottom: 20px;
+    margin-top: 8px;
+}
+
+#create-account-form {
+    text-align: left;
+}
+
+#create-account-form label {
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 16px;
+    /* identical to box height */
+    letter-spacing: -0.2px;
+    color: #FFFFFF;
 }
