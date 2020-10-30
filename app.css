@@ -111,11 +111,11 @@ body {
 }
 
 .search-bar:focus {
-    border: none;
+    outline: none;
 }
 
 .search-bar:active {
-    border: none;
+    outline: none;
 }
 
 .search-bar::placeholder {
