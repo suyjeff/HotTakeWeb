@@ -1,0 +1,28 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: auto;
+    background-color: white;
+}
+
+@media (min-width: 375px) {
+    .tab-bar {
+        width: 375px;
+        background-color: black;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+}
+
+.tab-bar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    color: white;
+}
+
+.active {
+    color: #FF347F;
+}
