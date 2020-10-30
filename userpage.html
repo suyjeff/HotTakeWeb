@@ -3,7 +3,7 @@
 <html lang="en">
 
     <head>
-        <title>HotTake - What's Hot</title>
+        <title>HotTake - Your Profile</title>
         <link href="styles.css" rel="stylesheet" type="text/css" media="all">
         <link href="app.css" rel="stylesheet" type="text/css" media="all">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,28 +18,21 @@
     <body>
 
         <div class="page-body">
-            <p class="page-title-large">What's Hot</p>
+            <p class="page-title-large">Your Profile</p>
             <div class="tab-page">
-                <p class="subtitle">Your Chats</p>
-                <div class="chat-list-item">
-                    <img class="team-image" src="assets/team_images/New York Giants.png" alt="Team Image">
-                    <div>
-                        <p class="team-name">Team Name</p>
-                        <p class="members">People in Chat</p>
-                    </div>
-                </div>
+                
             </div>
             
         </div>
 
         <div class="tab-bar">
-            <div class="tab-bar-item active">
+            <div class="tab-bar-item" onclick="location.href='home.html';">
                 <img class="tab-bar-img" src="assets/icons/fire_icon.svg" alt="Fire Icon">
             </div>
-            <div class="tab-bar-item" onclick="location.href='chatspage.html';">
+            <div class="tab-bar-item"  onclick="location.href='chatspage.html';">
                 <img class="tab-bar-img" src="assets/icons/chat_icon.svg" alt="Chat Icon">
             </div>
-            <div class="tab-bar-item" onclick="location.href='userpage.html';">
+            <div class="tab-bar-item active">
                 <img class="tab-bar-img" src="assets/icons/user_icon.svg" alt="User Icon">
             </div>
         </div>

@@ -52,6 +52,7 @@ body {
     letter-spacing: -0.28px;
     color: #000000;
     margin-top: 45px;
+    margin-bottom: 20px;
 }
 
 .subtitle {
@@ -62,14 +63,6 @@ body {
     /* identical to box height, or 129% */
     letter-spacing: -0.7px;
     color: #000000;
-}
-
-.active-tab {
-    display: block;
-}
-
-#chats-page {
-    display: none;
 }
 
 .chat-list-item {
@@ -106,4 +99,31 @@ body {
     width: 40px;
     height: 40px;
     margin-right: 16px;
+}
+
+.search-bar {
+    padding: 10px 8px;
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(118, 118, 128, 0.08);
+    background: rgba(118, 118, 128, 0.08);
+    margin-bottom: 16px;
+}
+
+.search-bar:focus {
+    border: none;
+}
+
+.search-bar:active {
+    border: none;
+}
+
+.search-bar::placeholder {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 17px;
+    line-height: 22px;
+    letter-spacing: -0.408px;
+    /* Label Color / Light / Secondary */
+    color: rgba(60, 60, 67, 0.6);
 }
