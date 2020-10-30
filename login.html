@@ -26,22 +26,84 @@
                 <p class="onboard-text">HotTake is a place for sports fans to share their hottest opinions, interact during live games, and connect with fellow fans.</p>
                 <div>
                     <form id="create-account-form">
-                        <label>Username</label>
-                        <input type="text" class="text-input">
+                        <label>Email</label>
+                        <input type="text" class="text-input" id="username">
                         <label>Password</label>
-                        <input type="text" class="text-input">
+                        <input type="text" class="text-input" id="password">
                     </form>
                 </div>
             </div>
 
             <div id="log-in-content">
-                <button class="main-button" onclick="location.href='onboardend.html';">Log In</button>
+                <!-- <button class="main-button" onclick="location.href='onboardend.html';">Log In</button> -->
+                <button class="main-button" id="login-button">Log In</button>
             </div>
             
         </div>
 
         <script src="onboard.js"></script>
         
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+            authDomain: "hottake-af593.firebaseapp.com",
+            databaseURL: "https://hottake-af593.firebaseio.com",
+            projectId: "hottake-af593",
+            storageBucket: "hottake-af593.appspot.com",
+            messagingSenderId: "1022543631385",
+            appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        </script>
     </body>
 
 </html>
+<script>
+    // If username and password input fields are set, try to login w/ provided credentials
+    function loginUser() {
+        var providedEmail = document.getElementById("username").value;
+        var providedPassword = document.getElementById("password").value;
+        if (providedEmail != "" && providedPassword != null) {
+            // Query Firebase to check validity of credentials
+            firebase.auth().signInWithEmailAndPassword(providedEmail, providedPassword).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                document.getElementsByTagName("body").append("Error " + errorCode + ": " + errorMessage);
+                return;
+            });
+            // window.location.href= "onboardend.html";
+        }
+    }
+    // Event listener for login button
+    document.getElementById("login-button").addEventListener("click", function(event){
+        loginUser();
+    }, false);
+
+    // Firebase observer
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        var providerData = user.providerData;
+        console.log(email);
+        // ...
+    } else {
+        // User is signed out.
+        // ...
+    }
+    });
+</script>
