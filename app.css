@@ -64,6 +64,14 @@ body {
     color: #000000;
 }
 
+.active-tab {
+    display: block;
+}
+
+#chats-page {
+    display: none;
+}
+
 .chat-list-item {
     background-color: #E6F4FF;
     padding: 20px 16px;
