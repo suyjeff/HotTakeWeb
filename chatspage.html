@@ -80,7 +80,7 @@
                 // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
                 Talk.ready.then(function() {
                     var me = new Talk.User({
-                        id: "123456",
+                        id: user.email,
                         name: user.email,
                         email: user.email,
                     });
