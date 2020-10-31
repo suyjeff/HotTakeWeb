@@ -31,6 +31,8 @@
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
         <!-- Add Firebase products that you want to use -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
         <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -50,6 +52,10 @@
 </html>
 
 <script>
+    // Set db
+    var db = firebase.firestore();
+
+    // Create teams buttons
     var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"];
     for(var i = 0; i < teams.length; i++) {
         console.log(i);
@@ -65,26 +71,49 @@
         "</button>";
     }
 
-    // Adds onclick event to move to next page, can't be done via innerHTML
-    var team_buttons = document.getElementsByClassName("team-button")
-    for(var j = 0; j < team_buttons.length; j++) {
-        team_buttons[j].onclick = function () {
-            location.href = "onboardend.html";
+    // TeamButton class
+    var teamButtons = document.getElementsByClassName("team-button");
+    class TeamButton {
+        constructor(index) {
+            this.index = index;
+            const btn = teamButtons[index];
+            btn.addEventListener('click', this);
+            this.teamName = btn.firstChild.firstChild.innerHTML;
         }
-    };
+        handleEvent(event) {
+            addTeam(this.teamName);
+        }
+    }
+
+    // Event listener for team buttons
+    for(var i = 0; i < teamButtons.length; i++) {
+        new TeamButton(i);
+    }
+
+    // Add team to Cloud Firestore if user is signed in
+    function addTeam(team) {
+        var user = firebase.auth().currentUser;
+        console.log(user.email);
+        console.log(team);
+        if (user) {
+            db.collection("users").doc(user.email).set({
+                username: user.email,
+                team: team
+            }).then(function() {
+                console.log("Document successfully written!");
+            }).catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+        }
+        // Redirect to onboardend
+        setTimeout(() => { location.href= "onboardend.html"; }, 500);
+    }
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         // User is signed in.
-        user.updateProfile({
-        displayName: "Dallas Cowboys"
-        }).then(function() {
-            // Update successful.
-        }).catch(function(error) {
-            // An error happened.
-        });
-        var userTeam = user.displayName;
+        // var userTeam = user.displayName;
         var email = user.email;
         // var emailVerified = user.emailVerified;
         // var photoURL = user.photoURL;
@@ -92,7 +121,7 @@
         // var uid = user.uid;
         // var providerData = user.providerData;
         console.log(email);
-        console.log(userTeam);
+        // console.log(userTeam);
         // ...
     } else {
         // User is signed out.

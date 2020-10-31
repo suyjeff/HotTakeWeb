@@ -49,6 +49,8 @@
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
         <!-- Add Firebase products that you want to use -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
         <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -80,7 +82,8 @@
                 document.getElementsByTagName("body").append("Error " + errorCode + ": " + errorMessage);
                 return;
             });
-            // window.location.href= "onboardend.html";
+            // Redirect to onboardend
+            window.location.href= "onboardend.html";
         }
     }
     // Event listener for login button

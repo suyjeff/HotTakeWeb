@@ -71,34 +71,37 @@
 
 </html>
 <script>
-    var db = firebase.firestore().ref();
+    // Set db
+    var db = firebase.firestore();
+
     // If username and password input fields are set, try to login w/ provided credentials
     function createAccount() {
         var providedEmail = document.getElementById("username").value;
         var providedPassword = document.getElementById("password").value;
         var confirmedPassword = document.getElementById("passwordConfirm").value;
         if (providedEmail != "" && providedPassword != "" && providedPassword == confirmedPassword) {
-            // Query Firebase to create account
+            // Add account to Firebase Auth
             firebase.auth().createUserWithEmailAndPassword(providedEmail, providedPassword).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                document.getElementsByTagName("body").append("Error " + errorCode + ": " + errorMessage);
+                document.getElementsByTagName("body")[0].append("Error " + errorCode + ": " + errorMessage);
+                console.log(error.message);
                 return;
             });
+            // Add account to Cloud Firestore
             db.collection("users").doc(providedEmail).set({
-                username: "Test",
-                team: "Test"
-            })
-            .then(function() {
+                username: providedEmail
+            }).then(function() {
                 console.log("Document successfully written!");
-            })
-            .catch(function(error) {
+            }).catch(function(error) {
                 console.error("Error writing document: ", error);
             });
-            // window.location.href= "join.html";
+            // Redirect to join.html
+            setTimeout(() => { location.href= "join.html"; }, 1500);
         }
     }
+
     // Event listener for create button
     document.getElementById("create-button").addEventListener("click", function(event){
         createAccount();
@@ -113,25 +116,25 @@
 
 
         // TEMPORARY CODE BELOW NEED TO CHANGE IT
-        var docRef = db.collection("users").doc(document.getElementById("username").value);
-        docRef.get().then(function(doc) {
-            if (doc.exists) {
-                console.log("Document data:", doc.data());
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-        });
+        // var docRef = db.collection("users").doc(document.getElementById("username").value);
+        // docRef.get().then(function(doc) {
+        //     if (doc.exists) {
+        //         console.log("Document data:", doc.data());
+        //     } else {
+        //         // doc.data() will be undefined in this case
+        //         console.log("No such document!");
+        //     }
+        // }).catch(function(error) {
+        //     console.log("Error getting document:", error);
+        // });
 
-        var displayName = user.displayName;
-        // var emailVerified = user.emailVerified;
+        // var displayName = user.displayName;
+        var email = user.email;
         // var photoURL = user.photoURL;
         // var isAnonymous = user.isAnonymous;
         // var uid = user.uid;
         // var providerData = user.providerData;
-        console.log(displayName);
+        console.log(email);
         // ...
     } else {
         // User is signed out.
