@@ -26,24 +26,117 @@
                 <p class="onboard-text">HotTake is a place for sports fans to share their hottest opinions, interact during live games, and connect with fellow fans.</p>
                 <div>
                     <form id="create-account-form">
-                        <label>Create a username</label>
-                        <input type="text" class="text-input">
-                        <label>Create a password</label>
-                        <input type="text" class="text-input">
+                        <label>Email</label>
+                        <input type="text" class="text-input" id="username">
+                        <label>Password</label>
+                        <input type="password" class="text-input" id="password">
                         <label>Confirm your password</label>
-                        <input type="text" class="text-input">
+                        <input type="password" class="text-input" id="passwordConfirm">
                     </form>
                 </div>
             </div>
 
             <div id="log-in-content">
-                <button class="main-button" onclick="location.href='join.html';">Create Account</button>
+                <!-- <button class="main-button" onclick="location.href='join.html';">Create Account</button> -->
+                <button class="main-button" id="create-button">Create Account</button>
             </div>
             
         </div>
 
         <script src="onboard.js"></script>
         
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+            authDomain: "hottake-af593.firebaseapp.com",
+            databaseURL: "https://hottake-af593.firebaseio.com",
+            projectId: "hottake-af593",
+            storageBucket: "hottake-af593.appspot.com",
+            messagingSenderId: "1022543631385",
+            appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        </script>
     </body>
 
 </html>
+<script>
+    var db = firebase.firestore().ref();
+    // If username and password input fields are set, try to login w/ provided credentials
+    function createAccount() {
+        var providedEmail = document.getElementById("username").value;
+        var providedPassword = document.getElementById("password").value;
+        var confirmedPassword = document.getElementById("passwordConfirm").value;
+        if (providedEmail != "" && providedPassword != "" && providedPassword == confirmedPassword) {
+            // Query Firebase to create account
+            firebase.auth().createUserWithEmailAndPassword(providedEmail, providedPassword).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                document.getElementsByTagName("body").append("Error " + errorCode + ": " + errorMessage);
+                return;
+            });
+            db.collection("users").doc(providedEmail).set({
+                username: "Test",
+                team: "Test"
+            })
+            .then(function() {
+                console.log("Document successfully written!");
+            })
+            .catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+            // window.location.href= "join.html";
+        }
+    }
+    // Event listener for create button
+    document.getElementById("create-button").addEventListener("click", function(event){
+        createAccount();
+    }, false);
+
+    // Firebase observer
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        // User is signed in.
+
+
+
+
+        // TEMPORARY CODE BELOW NEED TO CHANGE IT
+        var docRef = db.collection("users").doc(document.getElementById("username").value);
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
+        var displayName = user.displayName;
+        // var emailVerified = user.emailVerified;
+        // var photoURL = user.photoURL;
+        // var isAnonymous = user.isAnonymous;
+        // var uid = user.uid;
+        // var providerData = user.providerData;
+        console.log(displayName);
+        // ...
+    } else {
+        // User is signed out.
+        // ...
+    }
+    });
+
+</script>

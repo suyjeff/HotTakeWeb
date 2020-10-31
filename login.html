@@ -29,7 +29,7 @@
                         <label>Email</label>
                         <input type="text" class="text-input" id="username">
                         <label>Password</label>
-                        <input type="text" class="text-input" id="password">
+                        <input type="password" class="text-input" id="password">
                     </form>
                 </div>
             </div>
@@ -71,7 +71,7 @@
     function loginUser() {
         var providedEmail = document.getElementById("username").value;
         var providedPassword = document.getElementById("password").value;
-        if (providedEmail != "" && providedPassword != null) {
+        if (providedEmail != "" && providedPassword != "") {
             // Query Firebase to check validity of credentials
             firebase.auth().signInWithEmailAndPassword(providedEmail, providedPassword).catch(function(error) {
                 // Handle Errors here.
@@ -92,14 +92,14 @@
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         // User is signed in.
-        var displayName = user.displayName;
-        var email = user.email;
-        var emailVerified = user.emailVerified;
-        var photoURL = user.photoURL;
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        var providerData = user.providerData;
-        console.log(email);
+        // var displayName = user.displayName;
+        // var email = user.email;
+        // var emailVerified = user.emailVerified;
+        // var photoURL = user.photoURL;
+        // var isAnonymous = user.isAnonymous;
+        // var uid = user.uid;
+        // var providerData = user.providerData;
+        // console.log(email);
         // ...
     } else {
         // User is signed out.
