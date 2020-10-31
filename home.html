@@ -21,8 +21,8 @@
             <p class="page-title-large">What's Hot</p>
             <div class="tab-page">
                 <p class="subtitle">Your Chats</p>
-                <div class="chat-list-item">
-                    <img class="team-image" src="assets/team_images/New York Giants.png" alt="Team Image">
+                <div class="chat-list-item" onclick="location.href='chatspage.html';">
+                    <img class="team-image" src="" alt="Team Image">
                     <div>
                         <p class="team-name">Team Name</p>
                         <p class="members">People in Chat</p>
@@ -46,8 +46,48 @@
 
         <script src="tabbar.js"></script>
 
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+            authDomain: "hottake-af593.firebaseapp.com",
+            databaseURL: "https://hottake-af593.firebaseio.com",
+            projectId: "hottake-af593",
+            storageBucket: "hottake-af593.appspot.com",
+            messagingSenderId: "1022543631385",
+            appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);        
+        </script>        
     </body>
-
-    
-
 </html>
+<script>
+    // Set db
+    var db = firebase.firestore();
+
+    // Firebase observer
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var email = user.email;
+        console.log(email);
+        db.collection("users").doc(email).get().then(function(doc) {
+            if (doc.exists) {
+                console.log(doc.data().team);
+                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
+                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
+            }
+        }).catch(function(error) {
+            console.error("Error getting user info: ", error);
+        });
+    } 
+    });
+</script>

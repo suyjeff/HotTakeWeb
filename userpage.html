@@ -19,6 +19,7 @@
 
         <div class="page-body">
             <p class="page-title-large">Your Profile</p>
+            <button class="main-button" id="logout-button">Logout</button>
             <div class="tab-page">
                 
             </div>
@@ -39,8 +40,40 @@
 
         <script src="tabbar.js"></script>
 
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+            authDomain: "hottake-af593.firebaseapp.com",
+            databaseURL: "https://hottake-af593.firebaseio.com",
+            projectId: "hottake-af593",
+            storageBucket: "hottake-af593.appspot.com",
+            messagingSenderId: "1022543631385",
+            appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);        
+        </script>        
     </body>
-
-    
-
 </html>
+<script>
+    // Event listener for logout button
+    document.getElementById("logout-button").addEventListener("click", function(event){
+        firebase.auth().signOut().then(function() {
+            console.log("signed out");
+            // Sign-out successful.
+        }, function(error) {
+            console.log(error.message);
+        });
+        // Redirect to index.html
+        setTimeout(() => { location.href= "index.html"; }, 1000);
+    }, false);
+</script>

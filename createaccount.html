@@ -33,6 +33,7 @@
                         <label>Confirm your password</label>
                         <input type="password" class="text-input" id="passwordConfirm">
                     </form>
+                    <p class="error-message"></p>
                 </div>
             </div>
 
@@ -80,25 +81,34 @@
         var providedPassword = document.getElementById("password").value;
         var confirmedPassword = document.getElementById("passwordConfirm").value;
         if (providedEmail != "" && providedPassword != "" && providedPassword == confirmedPassword) {
+            var creationFailed = false;
             // Add account to Firebase Auth
             firebase.auth().createUserWithEmailAndPassword(providedEmail, providedPassword).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                document.getElementsByTagName("body")[0].append("Error " + errorCode + ": " + errorMessage);
-                console.log(error.message);
-                return;
+                document.getElementsByClassName("error-message")[0].innerHTML = errorMessage;
+                console.log(errorMessage);
+                creationFailed = true;
             });
             // Add account to Cloud Firestore
-            db.collection("users").doc(providedEmail).set({
-                username: providedEmail
-            }).then(function() {
-                console.log("Document successfully written!");
-            }).catch(function(error) {
-                console.error("Error writing document: ", error);
-            });
-            // Redirect to join.html
-            setTimeout(() => { location.href= "join.html"; }, 1500);
+            setTimeout(() => { 
+                if (!creationFailed) {
+                    db.collection("users").doc(providedEmail).set({
+                        username: providedEmail
+                    }).then(function() {
+                        console.log("Document successfully written!");
+                        // Redirect to join.html
+                        setTimeout(() => { location.href= "join.html"; }, 1000);
+                    }).catch(function(error) {
+                        console.error("Error writing document: ", error);
+                    });
+                }
+            }, 1000);
+        } else if (providedEmail == "" || providedPassword == "" || confirmedPassword == "") {
+            document.getElementsByClassName("error-message")[0].innerHTML = "Some fields are empty";
+        } else {
+            document.getElementsByClassName("error-message")[0].innerHTML = "Passwords don't match";
         }
     }
 
@@ -106,40 +116,4 @@
     document.getElementById("create-button").addEventListener("click", function(event){
         createAccount();
     }, false);
-
-    // Firebase observer
-    firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        // User is signed in.
-
-
-
-
-        // TEMPORARY CODE BELOW NEED TO CHANGE IT
-        // var docRef = db.collection("users").doc(document.getElementById("username").value);
-        // docRef.get().then(function(doc) {
-        //     if (doc.exists) {
-        //         console.log("Document data:", doc.data());
-        //     } else {
-        //         // doc.data() will be undefined in this case
-        //         console.log("No such document!");
-        //     }
-        // }).catch(function(error) {
-        //     console.log("Error getting document:", error);
-        // });
-
-        // var displayName = user.displayName;
-        var email = user.email;
-        // var photoURL = user.photoURL;
-        // var isAnonymous = user.isAnonymous;
-        // var uid = user.uid;
-        // var providerData = user.providerData;
-        console.log(email);
-        // ...
-    } else {
-        // User is signed out.
-        // ...
-    }
-    });
-
 </script>

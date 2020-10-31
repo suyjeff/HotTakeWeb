@@ -16,39 +16,107 @@
     </head>
 
     <body>
-
-        <div class="page-body">
-            <p class="page-title-large">Chats</p>
-            <div class="tab-page">
-                <input type="search" class="search-bar" placeholder="Search">
-
-                <div class="chat-list-item">
-                    <img class="team-image" src="assets/team_images/New York Giants.png" alt="Team Image">
-                    <div>
-                        <p class="team-name">Team Name</p>
-                        <p class="members">People in Chat</p>
-                    </div>
-                </div>
-
-            </div>
+        <div class="nav-bar">
+            <a class="back-btn" href="home.html"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
+            <p class="nav-label">Log In</p>
         </div>
-
-        <div class="tab-bar">
-            <div class="tab-bar-item" onclick="location.href='home.html';">
-                <img class="tab-bar-img" src="assets/icons/fire_icon.svg" alt="Fire Icon">
-            </div>
-            <div class="tab-bar-item active">
-                <img class="tab-bar-img" src="assets/icons/chat_icon.svg" alt="Chat Icon">
-            </div>
-            <div class="tab-bar-item" onclick="location.href='userpage.html';">
-                <img class="tab-bar-img" src="assets/icons/user_icon.svg" alt="User Icon">
+        <div class="page-body">
+            <p class="page-title-large">Chat</p>
+            <div class="tab-page">
+                <!-- minified snippet to load TalkJS without delaying your page -->
+                <script>
+                    (function(t,a,l,k,j,s){
+                    s=a.createElement('script');s.async=1;s.src="https://cdn.talkjs.com/talk.js";a.head.appendChild(s)
+                    ;k=t.Promise;t.Talk={v:3,ready:{then:function(f){if(k)return new k(function(r,e){l.push([f,r,e])});l
+                    .push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
+                </script>
+                <!-- container element in which TalkJS will display a chat UI -->
+                <div id="talkjs-container" style="width: 90%; margin: 30px; height: 500px">
+                    <i>Loading chat...</i>
+                </div>
             </div>
         </div>
 
         <script src="tabbar.js"></script>
 
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+            authDomain: "hottake-af593.firebaseapp.com",
+            databaseURL: "https://hottake-af593.firebaseio.com",
+            projectId: "hottake-af593",
+            storageBucket: "hottake-af593.appspot.com",
+            messagingSenderId: "1022543631385",
+            appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);        
+        </script>        
     </body>
-
-    
-
 </html>
+<script>
+    // Set db
+    var db = firebase.firestore();
+
+    // Firebase observer
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var email = user.email;
+        console.log(email);
+        db.collection("users").doc(email).get().then(function(doc) {
+            if (doc.exists) {
+                var userTeam = doc.data().team;
+                console.log(userTeam);
+                // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
+                // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
+                Talk.ready.then(function() {
+                    var me = new Talk.User({
+                        id: "123456",
+                        name: user.email,
+                        email: user.email,
+                    });
+                    window.talkSession = new Talk.Session({
+                        appId: "tJDiNf9l",
+                        me: me
+                    });
+                    var other = new Talk.User({
+                        id: "654321",
+                        name: "Sebastian",
+                        email: "Sebastian@example.com",
+                        photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
+                        welcomeMessage: "Hey, how can I help?"
+                    });
+                    var other2 = new Talk.User({
+                        id: "Sebastian2",
+                        name: "Sebastian2",
+                        email: "Sebastian2@example.com",
+                        photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
+                        welcomeMessage: "I am  abig fo  big fan of tTom Brayd?"
+                    });
+                    var conversation = talkSession.getOrCreateConversation(userTeam);
+                    conversation.setAttributes({
+                        subject: userTeam
+                    });
+                    conversation.setParticipant(me);
+                    conversation.setParticipant(other);
+                    conversation.setParticipant(other2);
+
+                    var inbox = talkSession.createInbox({selected: conversation});
+                    inbox.mount(document.getElementById("talkjs-container"));
+                });
+            }
+        }).catch(function(error) {
+            console.error("Error getting user info: ", error);
+        });
+    } 
+    });
+</script>
