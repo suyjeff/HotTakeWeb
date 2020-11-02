@@ -20,8 +20,11 @@
             <a class="back-btn" href="home.html"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
             <p class="nav-label">Chat</p>
         </div>
-        
-        <div class="page-body">
+        <!-- <div class="chat-score"> -->
+            <!-- <p class="chat-team-names">Packers vs. Steelers</p>
+            <p class="chat-team-names">32 - 42</p> -->
+        <!-- </div> -->
+        <div class="page-body" style="width: 100% !important;">
             <!-- <p class="page-title-large">Chat</p> -->
             <div class="tab-page">
                 <!-- minified snippet to load TalkJS without delaying your page -->
@@ -32,7 +35,7 @@
                     .push([f])},catch:function(){return k&&new k()},c:l}};})(window,document,[]);
                 </script>
                 <!-- container element in which TalkJS will display a chat UI -->
-                <div id="talkjs-container" style="width: 90%; margin: 30px; height: 500px">
+                <div id="talkjs-container" style="width: 100%; margin: auto; height: 90vh;">
                     <i>Loading chat...</i>
                 </div>
             </div>
@@ -84,24 +87,25 @@
                         id: user.email,
                         name: user.email,
                         email: user.email,
+                        role: "fan_1"
                     });
                     window.talkSession = new Talk.Session({
                         appId: "tJDiNf9l",
                         me: me
                     });
                     var other = new Talk.User({
-                        id: "654321",
-                        name: "Sebastian",
-                        email: "Sebastian@example.com",
+                        id: "fake1",
+                        name: "Wyatt",
+                        email: "wyatt@example.com",
                         photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
-                        welcomeMessage: "Hey, how can I help?"
+                        role: "fan_1"
                     });
                     var other2 = new Talk.User({
-                        id: "Sebastian2",
-                        name: "Sebastian2",
-                        email: "Sebastian2@example.com",
+                        id: "fake2",
+                        name: "Johnny",
+                        email: "johnny@example.com",
                         photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
-                        welcomeMessage: "I am  abig fo  big fan of tTom Brayd?"
+                        role: "fan_1"
                     });
                     var conversation = talkSession.getOrCreateConversation(userTeam);
                     conversation.setAttributes({

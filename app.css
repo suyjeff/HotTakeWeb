@@ -127,3 +127,11 @@ body {
     /* Label Color / Light / Secondary */
     color: rgba(60, 60, 67, 0.6);
 }
+
+.left-button-mobile-only {
+    display: none;
+}
+
+.chat-team-names {
+    /* margin-top: -5px; */
+}
