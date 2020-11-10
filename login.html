@@ -31,6 +31,7 @@
                         <label>Password</label>
                         <input type="password" class="text-input" id="password">
                     </form>
+                    <p class="error-message"></p>
                 </div>
             </div>
 
@@ -79,11 +80,13 @@
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                document.getElementsByTagName("body").append("Error " + errorCode + ": " + errorMessage);
-                return;
+                document.getElementsByClassName("error-message")[0].innerHTML = ("Error " + errorCode + ": " + errorMessage);
+                console.log(error.message);
+                // return;
             });
             // Redirect to onboardend
-            window.location.href= "onboardend.html";
+            // window.location.href= "onboardend.html";
+            console.log("out of error handling");
         }
     }
     
@@ -91,4 +94,13 @@
     document.getElementById("login-button").addEventListener("click", function(event){
         loginUser();
     }, false);
+
+    // When user logs in:
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        // Redirect to onboardend
+        // window.location.href= "onboardend.html";
+        console.log(user);
+    } 
+    });
 </script>
