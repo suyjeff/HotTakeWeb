@@ -38,6 +38,10 @@ body {
     filter: invert(24%) sepia(90%) saturate(7221%) hue-rotate(323deg) brightness(97%) contrast(110%);
 }
 
+.tab-page {
+    /* display: none; */
+}
+
 .page-body {
     width: 87%;
     margin: auto;
@@ -172,14 +176,24 @@ body {
 
 .scorecard-teams-container {
     display: flex;
-
 }
 
 .scorecard-team-card {
-    border-radius: 8px;
-    background-color: #0690F3;
-    width: 160px;
+    width: 150px;
     padding: 10px;
+}
+
+.left-team {
+    border-radius: 8px 0px 0px 8px;
+    padding-left: 20px;
+    background-color: #0690F3;
+}
+
+.right-team {
+    border-radius: 0px 8px 8px 0px;
+    text-align: right;
+    padding-right: 20px;
+    background-color: #004f88;
 }
 
 .scorecard-team {
@@ -192,7 +206,14 @@ body {
     text-align: center;
     letter-spacing: -0.006em;
     color: #FFFFFF;
-    margin-right: 8px;
+}
+
+.left-team .scorecard-team {
+    margin-left: 0px;
+}
+
+.right-team .scorecard-team {
+    margin-right: 0px;
 }
 
 .scorecard-team-record {
@@ -214,4 +235,22 @@ body {
     letter-spacing: -0.006em;
     color: #FFFFFF;
     margin-bottom: 6px;
+    margin-top: 8px;
+}
+
+.loader {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #FF347F; /* Blue */
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1.5s linear infinite;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
