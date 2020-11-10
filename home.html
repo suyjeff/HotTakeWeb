@@ -31,16 +31,16 @@
                 <p class="subtitle">Your Scores</p>
                 <div class="scorecard">
                     <div class="scorecard-game-info">
-                        <p style="margin: 0;"><span class="game-time">Game Time</span><span class="quarter">Quarter</span></p>
+                        <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
                     </div>
                     <div class="scorecard-teams-container">
                         <div class="scorecard-team-card left-team">
-                            <p style="margin: 4px;"><span class="scorecard-team">Jets</span><span class="scorecard-team-record">0-8</span></p>
-                            <p class="scorecard-score">24</p>
+                            <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team"></span><span class="scorecard-team-record"></span></p>
+                            <p class="scorecard-score" id="score-player-team">-</p>
                         </div>
                         <div class="scorecard-team-card right-team">
-                            <p style="margin: 4px;"><span class="scorecard-team">Patriots</span><span class="scorecard-team-record">3-5</span></p>
-                            <p class="scorecard-score">7</p>
+                            <p style="margin: 4px;"><span class="scorecard-team" id="name-other-team"></span><span class="scorecard-team-record"></span></p>
+                            <p class="scorecard-score" id="score-other-team">-</p>
                         </div>
                     </div>
                 </div>
@@ -87,9 +87,23 @@
         </script>        
     </body>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     // Set db
     var db = firebase.firestore();
+
+    var playerTeamAbbreviation = "";
+    var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
+                , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
+                "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
+                "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
+                "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Kansas City Chiefs",
+                "Las Vegas Raiders", "Los Angeles Chargers", "Los Angeles Rams", "Miami Dolphins",
+                "New Orleans Saints", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
+                "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
+    var teamsAbbreviated = ["MIN", "NYG", "NE", "NYJ", "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", 
+                            "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC", "LV", "LAC", "LA", "MIA", "NO",
+                            "PHI", "PIT", "SF", "SEA", "TB", "TEN", "WAS"];
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
@@ -101,10 +115,65 @@
                 console.log(doc.data().team);
                 document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
+                for (var i = 0; i < teams.length; i++) {
+                    if (teams[i] == doc.data().team) {
+                        playerTeamAbbreviation = teamsAbbreviated[i];
+                        getScore();
+                    }
+                }
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
         });
     } 
     });
+
+    // $(document).ready(function() {
+    function getScore() {
+        $.ajax({
+            type: "GET",
+            url: "https://static.nfl.com/liveupdate/scorestrip/ss.xml",
+            success: function(results) {
+                console.log("Success");
+                displayScore(results)
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+    function displayScore(results) {
+        resultsList = results.getElementsByTagName("g");
+        for (var i = 0; i < resultsList.length; i++) {
+            result = resultsList[i];
+            console.log(result);
+            console.log(result.getAttribute("h"))
+            if (result.getAttribute("h") == playerTeamAbbreviation) {
+                console.log(result.getAttribute("hs"));
+                console.log(result.getAttribute("vs"));
+                document.getElementById("score-player-team").innerHTML = result.getAttribute("hs");
+                document.getElementById("score-other-team").innerHTML = result.getAttribute("vs");
+                document.getElementById("name-player-team").innerHTML = result.getAttribute("h")
+                document.getElementById("name-other-team").innerHTML = result.getAttribute("v")
+                if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
+                    result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
+                        document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+                    } 
+                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+            } else if (result.getAttribute("v") == playerTeamAbbreviation) {
+                console.log(result.getAttribute("hs"));
+                console.log(result.getAttribute("vs"));
+                document.getElementById("score-player-team").innerHTML = result.getAttribute("vs");
+                document.getElementById("score-other-team").innerHTML = result.getAttribute("hs");
+                document.getElementById("name-player-team").innerHTML = result.getAttribute("v")
+                document.getElementById("name-other-team").innerHTML = result.getAttribute("h")
+                if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
+                    result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
+                        document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+                    } 
+                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+            }
+        }
+    }
+
 </script>
