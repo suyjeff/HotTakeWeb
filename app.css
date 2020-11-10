@@ -135,3 +135,83 @@ body {
 .chat-team-names {
     /* margin-top: -5px; */
 }
+
+.scorecard-game-info {
+    text-align: center;
+    background-color: black;
+    color: white;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+.game-time {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: -0.006em;
+    color: #FFFFFF;
+    margin-right: 8px;
+}
+
+.quarter {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: -0.006em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.scorecard-teams-container {
+    display: flex;
+
+}
+
+.scorecard-team-card {
+    border-radius: 8px;
+    background-color: #0690F3;
+    width: 160px;
+    padding: 10px;
+}
+
+.scorecard-team {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: -0.006em;
+    color: #FFFFFF;
+    margin-right: 8px;
+}
+
+.scorecard-team-record {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+    text-align: center;
+    letter-spacing: -0.006em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.scorecard-score {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 36px;
+    letter-spacing: -0.006em;
+    color: #FFFFFF;
+    margin-bottom: 6px;
+}
