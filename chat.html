@@ -21,13 +21,14 @@
         <div class="page-body">
             <p class="page-title-large">Chats</p>
             <div class="tab-page" style="display: none;">
-                <div class="chat-list-item" onclick="location.href='chatspage.html';">
+                <!-- <div class="chat-list-item" onclick="location.href='chatspage.html';">
                     <img class="team-image" src="" alt=" ">
                     <div>
                         <p class="team-name">Team Name</p>
                         <p class="members">People in Chat</p>
                     </div>
-                </div>
+                </div> -->
+                <div id="teams-div"></div>
             </div>
             <div class="loader"></div>
         </div>
@@ -83,12 +84,61 @@
         db.collection("users").doc(email).get().then(function(doc) {
             if (doc.exists) {
                 console.log(doc.data().team);
-                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
-                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
+                // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
+                // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
         });
     } 
     });
+
+    // Make buttons for each team's chat
+    var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
+                , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
+                "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
+                "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
+                "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Kansas City Chiefs",
+                "Las Vegas Raiders", "Los Angeles Chargers", "Los Angeles Rams", "Miami Dolphins",
+                "New Orleans Saints", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
+                "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
+    for(var i = 0; i < teams.length; i++) {
+        document.getElementById("teams-div").innerHTML += 
+        "<button class='chat-list-item'>" +
+            "<div class='left'>" +
+                "<p class='team-text'>" + teams[i] + "</p>" +
+                "<p class='sport-text'>NFL</p>" +
+            "</div>" +
+            "<div class='right'>" +
+                "<img src='assets/team_images/" + teams[i] + ".png' alt='" + teams[i] + "' width='60' height='60'>" +
+            "</div>" + 
+        "</button>";
+    }
+    // TeamButton class
+    var teamButtons = document.getElementsByClassName("chat-list-item");
+    class TeamButton {
+        constructor(index) {
+            this.index = index;
+            const btn = teamButtons[index];
+            btn.addEventListener('click', this);
+            this.teamName = btn.firstChild.firstChild.innerHTML;
+        }
+        handleEvent(event) {
+            goToChat(this.teamName);
+        }
+    }
+    // Event listener for team buttons
+    for(var i = 0; i < teamButtons.length; i++) {
+        new TeamButton(i);
+    }
+    // Go to chat if user is signed in
+    function goToChat(team) {
+        var user = firebase.auth().currentUser;
+        console.log(user.email);
+        console.log(team);
+        if (user) {
+            setTimeout(() => { location.href= "chatspage.html?team=" + team.replace(" ", "_"); }, 500);
+        }
+        
+    }
 </script>

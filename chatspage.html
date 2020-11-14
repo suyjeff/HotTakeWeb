@@ -13,9 +13,29 @@
         <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
         <link rel="manifest" href="assets/favicon/site.webmanifest">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
 
     <body>
+        <div class="chat-score-display">
+            <div class="scorecard">
+                <p class="game-date-time"></p>
+                <div class="scorecard-game-info">
+                    <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
+                </div>
+                <div class="scorecard-teams-container">
+                    <div class="scorecard-team-card left-team">
+                        <p style="margin: 4px;"><span class="scorecard-team" id="name-home-team"></span><span class="scorecard-team-record"></span></p>
+                        <p class="scorecard-score" id="score-home-team">-</p>
+                    </div>
+                    <div class="scorecard-team-card right-team">
+                        <p style="margin: 4px;"><span class="scorecard-team" id="name-away-team"></span><span class="scorecard-team-record"></span></p>
+                        <p class="scorecard-score" id="score-away-team">-</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         <div class="nav-bar" style="background-color: black;">
             <a class="back-btn" href="home.html"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
             <p class="nav-label">Chat</p>
@@ -68,6 +88,24 @@
 <script>
     // Set db
     var db = firebase.firestore();
+    var chatTeam = "";
+    if(window.location.search.length > 0) {
+        chatTeam = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
+    }
+    console.log(chatTeam);
+
+    var playerTeamAbbreviation = "";
+    var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
+                , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
+                "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
+                "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
+                "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Kansas City Chiefs",
+                "Las Vegas Raiders", "Los Angeles Chargers", "Los Angeles Rams", "Miami Dolphins",
+                "New Orleans Saints", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
+                "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
+    var teamsAbbreviated = ["MIN", "NYG", "NE", "NYJ", "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", 
+                            "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC", "LV", "LAC", "LA", "MIA", "NO",
+                            "PHI", "PIT", "SF", "SEA", "TB", "TEN", "WAS"];
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
@@ -92,23 +130,30 @@
                         me: me
                     });
                     var other = new Talk.User({
-                        id: "fake1",
+                        id: "fake3",
                         name: "Wyatt",
                         email: "wyatt@example.com",
                         photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
-                        role: "fan_1"
+                        role: "fan_2"
                     });
                     var other2 = new Talk.User({
-                        id: "fake2",
+                        id: "fak4",
                         name: "Johnny",
                         email: "johnny@example.com",
                         photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
-                        role: "fan_1"
+                        role: "fan_2"
                     });
+                    console.log(chatTeam);
                     var conversation = talkSession.getOrCreateConversation(userTeam);
                     conversation.setAttributes({
                         subject: userTeam
                     });
+                    if (chatTeam != "") {
+                        var conversation = talkSession.getOrCreateConversation(chatTeam);
+                        conversation.setAttributes({
+                            subject: chatTeam
+                        });
+                    }
                     conversation.setParticipant(me);
                     conversation.setParticipant(other);
                     conversation.setParticipant(other2);
@@ -116,10 +161,66 @@
                     var inbox = talkSession.createInbox({selected: conversation});
                     inbox.mount(document.getElementById("talkjs-container"));
                 });
+                for (var i = 0; i < teams.length; i++) {
+                    if (teams[i] == userTeam) {
+                        playerTeamAbbreviation = teamsAbbreviated[i];
+                        getScore();
+                    }
+                }
+                if (chatTeam != "") {
+                    for (var i = 0; i < teams.length; i++) {
+                        if (teams[i] == chatTeam) {
+                            playerTeamAbbreviation = teamsAbbreviated[i];
+                            getScore();
+                        }
+                    }
+                }
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
         });
+
+        // Get and display score of most recent game for current team
+        getScore();
     } 
     });
+
+    function getScore() {
+        $.ajax({
+            type: "GET",
+            url: "https://static.nfl.com/liveupdate/scorestrip/ss.xml",
+            success: function(results) {
+                console.log("Success");
+                displayScore(results)
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+    function displayScore(results) {
+        resultsList = results.getElementsByTagName("g");
+        for (var i = 0; i < resultsList.length; i++) {
+            result = resultsList[i];
+            console.log(result);
+            console.log(result.getAttribute("h"))
+            if (result.getAttribute("h") == playerTeamAbbreviation || result.getAttribute("v") == playerTeamAbbreviation) {
+                console.log(result.getAttribute("hs"));
+                console.log(result.getAttribute("vs"));
+                document.getElementById("score-home-team").innerHTML = result.getAttribute("hs");
+                document.getElementById("score-away-team").innerHTML = result.getAttribute("vs");
+                document.getElementById("name-home-team").innerHTML = result.getAttribute("h")
+                document.getElementById("name-away-team").innerHTML = result.getAttribute("v")
+                if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
+                    result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
+                        document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+                    } 
+                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+                document.getElementsByClassName("game-date-time")[0].innerHTML = 
+                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
+                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+            }
+        }
+    }
 </script>

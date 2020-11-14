@@ -23,6 +23,7 @@
             <div class="tab-page" style="display: none;">
                 <p class="subtitle">Scores</p>
                 <div class="scorecard">
+                    <p class="game-date-time"></p>
                     <div class="scorecard-game-info">
                         <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
                     </div>
@@ -128,7 +129,6 @@
     } 
     });
 
-    // $(document).ready(function() {
     function getScore() {
         $.ajax({
             type: "GET",
@@ -160,6 +160,10 @@
                         document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
                     } 
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+                document.getElementsByClassName("game-date-time")[0].innerHTML = 
+                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
+                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
             } else if (result.getAttribute("v") == playerTeamAbbreviation) {
                 console.log(result.getAttribute("hs"));
                 console.log(result.getAttribute("vs"));
@@ -172,6 +176,10 @@
                         document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
                     } 
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+                document.getElementsByClassName("game-date-time")[0].innerHTML = 
+                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
+                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
             }
         }
     }
