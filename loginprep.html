@@ -63,6 +63,7 @@
 
 </html>
 <script>
+    // Handle logging in with Google
     document.getElementById("google-button").addEventListener("click", function(event) {
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function(result) {
@@ -83,6 +84,8 @@
             // ...
         });
     }, false);
+
+    // Handle logging in with Facebook
     document.getElementById("facebook-button").addEventListener("click", function(event) {
         var provider = new firebase.auth.FacebookAuthProvider();
         firebase.auth().signInWithPopup(provider).then(function(result) {
@@ -103,5 +106,12 @@
             // ...
         });
     }, false);
+
+    // Redirect to onboardend when user logs in
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            window.location.href = "onboardend.html";
+        }
+    });
 
 </script>
