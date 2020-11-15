@@ -27,8 +27,8 @@
             </div>
 
             <div id="log-in-content">
-                <button class="main-button" style="margin-bottom: 12px;" onclick="location.href='join.html';">Continue with Facebook</button>
-                <button class="main-button" style="margin-bottom: 12px;" onclick="location.href='join.html';">Continue with Google</button>
+                <button class="main-button" style="margin-bottom: 12px;" id="facebook-button">Continue with Facebook</button>
+                <button class="main-button" style="margin-bottom: 12px;" id="google-button">Continue with Google</button>
                 <button class="main-button" onclick="location.href='login.html';">Log In</button>
             </div>
             
@@ -36,6 +36,51 @@
 
         <script src="onboard.js"></script>
         
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+            authDomain: "hottake-af593.firebaseapp.com",
+            databaseURL: "https://hottake-af593.firebaseio.com",
+            projectId: "hottake-af593",
+            storageBucket: "hottake-af593.appspot.com",
+            messagingSenderId: "1022543631385",
+            appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        </script>
+        
     </body>
 
 </html>
+<script>
+    document.getElementById("google-button").addEventListener("click", function(event) {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            console.log(user);
+            // ...
+            }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+        });
+    }, false);
+</script>
