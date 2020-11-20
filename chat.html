@@ -28,7 +28,7 @@
                         <p class="members">People in Chat</p>
                     </div>
                 </div> -->
-                <div id="teams-div"></div>
+                <div id="teams-div" style="height: 650px;"></div>
             </div>
             <div class="loader"></div>
         </div>
@@ -104,7 +104,7 @@
                 "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
     for(var i = 0; i < teams.length; i++) {
         document.getElementById("teams-div").innerHTML += 
-        "<button class='chat-list-item'>" +
+        "<button class='chat-list-item-fw'>" +
             "<div class='left'>" +
                 "<p class='team-text'>" + teams[i] + "</p>" +
                 "<p class='sport-text'>NFL</p>" +
@@ -115,7 +115,7 @@
         "</button>";
     }
     // TeamButton class
-    var teamButtons = document.getElementsByClassName("chat-list-item");
+    var teamButtons = document.getElementsByClassName("chat-list-item-fw");
     class TeamButton {
         constructor(index) {
             this.index = index;

@@ -17,26 +17,27 @@
     </head>
 
     <body>
-        <div class="chat-score-display">
+        <div class="chat-score-display" style="height: 160px;">
             <div class="scorecard">
-                <p class="game-date-time"></p>
-                <div class="scorecard-game-info">
+                <div class="game-date-time-container no-border">
+                    <p class="game-date-time"></p>
+                </div>
+                <div class="scorecard-game-info" style="border-radius: 0 !important;">
                     <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
                 </div>
                 <div class="scorecard-teams-container">
-                    <div class="scorecard-team-card left-team">
-                        <p style="margin: 4px;"><span class="scorecard-team" id="name-home-team"></span><span class="scorecard-team-record"></span></p>
+                    <div class="scorecard-team-card left-team chat-team-card ctc-l">
                         <p class="scorecard-score" id="score-home-team">-</p>
+                        <p class="home-team"><span class="scorecard-team" id="name-home-team"></span><span class="scorecard-team-record"></span></p>
                     </div>
-                    <div class="scorecard-team-card right-team">
-                        <p style="margin: 4px;"><span class="scorecard-team" id="name-away-team"></span><span class="scorecard-team-record"></span></p>
+                    <div class="scorecard-team-card right-team chat-team-card ctc-r">
+                        <p class="away-team"><span class="scorecard-team" id="name-away-team"></span><span class="scorecard-team-record"></span></p>
                         <p class="scorecard-score" id="score-away-team">-</p>
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="nav-bar" style="background-color: black;">
+        <div class="nav-bar" style="margin-top: 0; background-color: black;">
             <a class="back-btn" href="home.html"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
             <p class="nav-label">Chat</p>
         </div>

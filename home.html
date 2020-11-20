@@ -23,7 +23,9 @@
             <div class="tab-page" style="display: none;">
                 <p class="subtitle">Scores</p>
                 <div class="scorecard">
-                    <p class="game-date-time"></p>
+                    <div class="game-date-time-container">
+                        <p class="game-date-time"></p>
+                    </div>
                     <div class="scorecard-game-info">
                         <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
                     </div>
@@ -142,6 +144,7 @@
             }
         });
     }
+
     function displayScore(results) {
         resultsList = results.getElementsByTagName("g");
         for (var i = 0; i < resultsList.length; i++) {
