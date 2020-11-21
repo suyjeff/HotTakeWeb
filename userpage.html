@@ -19,9 +19,35 @@
 
         <div class="page-body">
             <p class="page-title-large">Your Profile</p>
-            <button class="main-button" id="logout-button">Logout</button>
+            <!-- <button class="main-button" id="logout-button">Logout</button> -->
             <div class="tab-page">
-                
+                <!-- Import user information here -->
+                <div id="profile-header">
+                    <div style="float: left;">
+                        <div class="profile-picture">
+
+                        </div>
+                    </div>
+                    <div class="profile-user-info">
+                        <p class="profile-name">John Jonson</p>
+                        <p class="profile-username">Username or email</p>
+                    </div>
+                </div>
+                <p class="subtitle">Member of</p>
+                <!-- Add list of teams/chats they are a part of here -->
+                <div class="chat-list-item" onclick="location.href='chatspage.html';">
+                    <img class="team-image" src="" alt="Team Image">
+                    <div>
+                        <p class="team-name">Team Name</p>
+                        <p class="members">People in Chat</p>
+                    </div>
+                </div>
+                <p class="subtitle">Settings</p>
+                <div id="settings-container">
+                    <button class="settings-button">Change Team</button>
+                    <button class="settings-button">Change Avatar</button>
+                    <button class="settings-button" id="logout-button">Log out</button>
+                </div>
             </div>  
         </div>
 

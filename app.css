@@ -316,3 +316,69 @@ body {
     border-radius: 0 !important;
     margin-bottom: 0;
 }
+
+#profile-header {
+    background-color: black;
+    /* width: 100%; */
+    display: flex;
+    color: white;
+    padding: 16px;
+    align-items: center;
+}
+
+.profile-picture {
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
+    background-color: #0690F3;
+}
+
+.profile-user-info {
+    display: block;
+    float: right;
+    margin-left: 16px; 
+}
+
+.profile-name {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: -0.28px;
+    color: #FFFFFF;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.profile-username {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.6px;
+    color: #FFFFFF;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+#settings-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-button {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: -0.006em;
+    color: #0690F3;
+    text-align: left;
+    background-color: white;
+    padding: 0;
+    border: none;
+    margin-bottom: 16px;
+}
+
+#logout-button {
+    color: #FF4301;
+}
