@@ -28,6 +28,8 @@
                     <form id="create-account-form">
                         <label>Email</label>
                         <input type="text" class="text-input" id="username">
+                        <label>Display Name</label>
+                        <input type="text" class="text-input" id="displayName">
                         <label>Password</label>
                         <input type="password" class="text-input" id="password">
                         <label>Confirm your password</label>
@@ -80,10 +82,17 @@
         var providedEmail = document.getElementById("username").value;
         var providedPassword = document.getElementById("password").value;
         var confirmedPassword = document.getElementById("passwordConfirm").value;
-        if (providedEmail != "" && providedPassword != "" && providedPassword == confirmedPassword) {
+        var providedDisplayName = document.getElementById("displayName").value;
+        if (providedEmail != "" && providedPassword != "" && providedDisplayName != "" && providedPassword == confirmedPassword) {
             var creationFailed = false;
             // Add account to Firebase Auth
-            firebase.auth().createUserWithEmailAndPassword(providedEmail, providedPassword).catch(function(error) {
+            firebase.auth().createUserWithEmailAndPassword(providedEmail, providedPassword)
+            .then(function(user) {
+                var user = firebase.auth().currentUser;
+                user.updateProfile({
+                    displayName: providedDisplayName
+                });
+            }, function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;

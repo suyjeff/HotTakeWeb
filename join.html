@@ -12,6 +12,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
         <link rel="manifest" href="assets/favicon/site.webmanifest">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -19,11 +20,17 @@
             <div class="nav-bar">
                 <!-- <img class="back-btn" src="assets/icons/left-arrow.png" alt="Left Arrow"> -->
                 <p class="nav-label">Join a team</p>
+                <div class="loader"></div>
             </div>
-            <p class="onboard-text">Find your favorite teams and join fellow fans!</p>
-            <div id="teams-div">
+            <div class="tab-page" style="display: none;">
+                <p class="onboard-text">Find your favorite teams and join fellow fans!</p>
+                <div id="teams-div">
+                </div>    
             </div>
-        </div>
+        </div>    
+
+
+        <script src="interactions.js"></script>
 
         <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>

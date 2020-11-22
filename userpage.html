@@ -13,6 +13,7 @@
         <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
         <link rel="manifest" href="assets/favicon/site.webmanifest">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
 
     <body>
@@ -20,7 +21,7 @@
         <div class="page-body">
             <p class="page-title-large">Your Profile</p>
             <!-- <button class="main-button" id="logout-button">Logout</button> -->
-            <div class="tab-page">
+            <div class="tab-page" style="display: none;">
                 <!-- Import user information here -->
                 <div id="profile-header">
                     <div style="float: left;">
@@ -29,8 +30,8 @@
                         </div>
                     </div>
                     <div class="profile-user-info">
-                        <p class="profile-name">John Jonson</p>
-                        <p class="profile-username">Username or email</p>
+                        <p class="profile-name"></p>
+                        <p class="profile-username">Set Display Name</p>
                     </div>
                 </div>
                 <p class="subtitle">Member of</p>
@@ -44,11 +45,20 @@
                 </div>
                 <p class="subtitle">Settings</p>
                 <div id="settings-container">
-                    <button class="settings-button">Change Team</button>
-                    <button class="settings-button">Change Avatar</button>
+                    <button class="settings-button" id="change-team-button">Change Team</button>
+                    <button class="settings-button" id="change-name-button">Change Display Name</button>
+                    <div>
+                        <div class="left">
+                            <button class="settings-button" id="change-avatar-button">Change Avatar</button>
+                        </div>
+                        <div class="right">
+                            <input type="file" multiple="false" accept="image/*" id="pfpInput" onchange="upload()">
+                        </div>
+                    </div>
                     <button class="settings-button" id="logout-button">Log out</button>
                 </div>
             </div>  
+            <div class="loader"></div>
         </div>
 
         <div class="tab-bar">
@@ -64,6 +74,7 @@
         </div>
 
         <script src="tabbar.js"></script>
+        <script src="interactions.js"></script>
 
         <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
@@ -73,6 +84,7 @@
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
         <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -90,6 +102,46 @@
     </body>
 </html>
 <script>
+    // Set db
+    var db = firebase.firestore();
+    var storageRef;
+
+    // Firebase observer
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var email = user.email;
+        storageRef = firebase.storage().ref("pfps/" + email);
+        console.log(user);
+        db.collection("users").doc(email).get().then(function(doc) {
+            if (doc.exists) {
+                console.log(doc.data().team);
+                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
+                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
+                // for (var i = 0; i < teams.length; i++) {
+                //     if (teams[i] == doc.data().team) {
+                //         playerTeamAbbreviation = teamsAbbreviated[i];
+                //         getScore();
+                //     }
+                // }
+                console.log(email);
+                document.getElementsByClassName("profile-name")[0].innerHTML = email;
+                if (user.displayName != null) {
+                    document.getElementsByClassName("profile-username")[0].innerHTML = user.displayName;
+                }
+                // Display profile picture
+                var imageLocation = user.email.replace("@", "%40");
+                var img = document.createElement("img");
+                img.src = "https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2F" + imageLocation + "?alt=media&token=https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2Fihufbsgioio%40gmail.com?alt=media";
+                img.setAttribute("width", 70);
+                img.setAttribute("height", 70);
+                document.getElementsByClassName("profile-picture")[0].appendChild(img);
+            }
+        }).catch(function(error) {
+            console.error("Error getting user info: ", error);
+        });
+    } 
+    });
+
     // Event listener for logout button
     document.getElementById("logout-button").addEventListener("click", function(event){
         firebase.auth().signOut().then(function() {
@@ -101,4 +153,55 @@
         // Redirect to index.html
         setTimeout(() => { location.href= "index.html"; }, 1000);
     }, false);
+
+    document.addEventListener("DOMContentLoaded", pageLoaded, false);
+    function pageLoaded() {
+        // Event listener for setting display name
+        document.getElementsByClassName("profile-username")[0].addEventListener("click", changeDisplayName, false);
+        document.getElementById("change-name-button").addEventListener("click", changeDisplayName, false);
+
+        // Event listener for changing team
+        document.getElementById("change-team-button").addEventListener("click", function() {
+            console.log("changing team");
+            setTimeout(() => { location.href= "join.html"; }, 500);
+        }, false);
+    }
+
+    function changeDisplayName() {
+        console.log("setting username");
+        var givenDisplayName = prompt("Enter a display name: ", "");
+        if (givenDisplayName != null && givenDisplayName != "") {
+            // Set display name
+            const user = firebase.auth().currentUser;
+            console.log(user);
+            user.updateProfile({
+                displayName: givenDisplayName
+            });
+            // Show display name
+            document.getElementsByClassName("profile-username")[0].innerHTML = givenDisplayName;
+        }
+    }
+
+    var uploadPFP = document.getElementById("pfpInput");
+    uploadPFP.addEventListener("change", function(event) {
+        console.log("setting pfp");
+        // Upload image to Firebase
+        let uploadedImage = event.target.files[0];
+        let uploadTask = storageRef.put(uploadedImage);
+        // Set image for user
+        const user = firebase.auth().currentUser;
+        var imageLocation = user.email.replace("@", "%40");
+        user.updateProfile({
+            photoURL: "https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2F" + imageLocation + "?alt=media&token=https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2Fihufbsgioio%40gmail.com?alt=media"
+        });
+        // Display image
+        document.getElementsByClassName("profile-picture")[0].innerHTML = "";
+        var img = document.createElement("img");
+        setTimeout(() => { 
+            img.src = "https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2F" + imageLocation + "?alt=media&token=https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2Fihufbsgioio%40gmail.com?alt=media";
+            img.setAttribute("width", 70);
+            img.setAttribute("height", 70);
+            document.getElementsByClassName("profile-picture")[0].appendChild(img);
+         }, 500);
+    });
 </script>
