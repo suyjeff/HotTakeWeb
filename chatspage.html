@@ -121,8 +121,9 @@
                 Talk.ready.then(function() {
                     var me = new Talk.User({
                         id: user.email,
-                        name: user.email,
+                        name: user.displayName,
                         email: user.email,
+                        photoURL: user.photoURL, 
                         role: "fan_1"
                     });
                     window.talkSession = new Talk.Session({
