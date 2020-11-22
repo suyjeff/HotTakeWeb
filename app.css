@@ -333,6 +333,10 @@ body {
     background-color: #0690F3;
 }
 
+.profile-picture img {
+    border-radius: 50px;
+}
+
 .profile-user-info {
     display: block;
     float: right;
@@ -377,6 +381,10 @@ body {
     padding: 0;
     border: none;
     margin-bottom: 16px;
+}
+
+input[type="file"] {
+    display: none;
 }
 
 #logout-button {

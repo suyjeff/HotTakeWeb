@@ -47,14 +47,18 @@
                 <div id="settings-container">
                     <button class="settings-button" id="change-team-button">Change Team</button>
                     <button class="settings-button" id="change-name-button">Change Display Name</button>
-                    <div>
+                    <label for="pfpInput" class="settings-button">
+                        Change Avatar
+                    </label>
+                    <input id="pfpInput" type="file"/>
+                    <!-- <div>
                         <div class="left">
                             <button class="settings-button" id="change-avatar-button">Change Avatar</button>
                         </div>
                         <div class="right">
-                            <input type="file" multiple="false" accept="image/*" id="pfpInput" onchange="upload()">
+                            <input type="file" multiple="false" accept="image/*" class="settings-button" id="pfpInput" onchange="upload()">
                         </div>
-                    </div>
+                    </div> -->
                     <button class="settings-button" id="logout-button">Log out</button>
                 </div>
             </div>  
