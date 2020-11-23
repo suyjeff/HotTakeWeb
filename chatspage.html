@@ -199,7 +199,8 @@
                                     }
                                 }
                             });
-                            if (! (i > 10 || breakingOut)) {
+                            if (i > 10 || breakingOut) {
+                                console.log("Breaking while loop");
                                 theWhileLoop();
                             }
                         }, 500)
