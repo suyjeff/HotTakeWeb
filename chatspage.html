@@ -157,7 +157,7 @@
                             console.log(conversationID);
                             console.log(breakingOut);
                             // Make PUT call to create rooms if they don't already exist
-                            const result = await $.ajax({
+                            $.ajax({
                                 type: "PUT",
                                 url: "https://api.talkjs.com/v1/tJDiNf9l/conversations/" + conversationID,
                                 beforeSend: function(xhr) {
