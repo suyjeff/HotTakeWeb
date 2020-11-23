@@ -185,29 +185,7 @@
         resultsList = results.getElementsByTagName("g");
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
-            console.log(result);
-            console.log(result.getAttribute("h"))
-            if (result.getAttribute("h") == playerTeamAbbreviation) {
-                console.log(result.getAttribute("hs"));
-                console.log(result.getAttribute("vs"));
-                document.getElementById("score-player-team").innerHTML = result.getAttribute("hs");
-                document.getElementById("score-other-team").innerHTML = result.getAttribute("vs");
-                document.getElementById("name-player-team").innerHTML = result.getAttribute("h")
-                document.getElementById("name-other-team").innerHTML = result.getAttribute("v")
-                // Set colors for home team
-                document.getElementsByClassName("left-team")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
-                document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                // Set colors for away team
-                document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
-                document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
-                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("game-date-time")[0].innerHTML = 
-                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
-                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
-                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
-            } else if (result.getAttribute("v") == playerTeamAbbreviation) {
+            if (result.getAttribute("h") == playerTeamAbbreviation || result.getAttribute("v") == playerTeamAbbreviation) {
                 console.log(result.getAttribute("hs"));
                 console.log(result.getAttribute("vs"));
                 document.getElementById("score-player-team").innerHTML = result.getAttribute("vs");
@@ -219,9 +197,9 @@
                 document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 // Set colors for away team
-                document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
-                document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
+                document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[result.getAttribute("h")][0];
+                document.getElementById("score-other-team").style.color = teamColors[result.getAttribute("h")][1];
+                document.getElementById("name-other-team").style.color = teamColors[result.getAttribute("h")][1];
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
                 document.getElementsByClassName("game-date-time")[0].innerHTML = 
                 result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
