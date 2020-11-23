@@ -6,7 +6,7 @@ body {
 
 @media (min-width: 375px) {
     .tab-bar {
-        width: 375px;
+        width: 100%;
         background-color: black;
         display: flex;
         justify-content: space-between;
