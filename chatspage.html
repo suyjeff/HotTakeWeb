@@ -114,6 +114,10 @@
             if (doc.exists) {
                 var userTeam = doc.data().team;
                 console.log(userTeam);
+                if (chatTeam == "") {
+                    chatTeam = userTeam;
+                }
+                console.log(chatTeam);
                 // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
                 Talk.ready.then(function() {
@@ -142,7 +146,6 @@
                         photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
                         role: "fan_2",
                     });
-                    console.log(chatTeam);
                     // While loop through all possible rooms for chatTeam
                     // If more than 5 people in room, keep iterating through while loop until finding proper room
                     var numberUsers = 0;
