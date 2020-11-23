@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <title>HotTake - Game Information</title>
+        <link href="styles.css" rel="stylesheet" type="text/css" media="all">
+        <link href="app.css" rel="stylesheet" type="text/css" media="all">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.typekit.net/nwy3jid.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+        <link rel="manifest" href="assets/favicon/site.webmanifest">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- Test Account to use: jeffsu@gmail.com, test123, Chiefs Fan -->
+    </head>
+
+    <body>
+        <div class="page-body" style="width: 100% !important;">
+
+            <div class="nav-bar" style="margin-top: 0; background-color: black;">
+                <a class="back-btn" href="home.html" style="margin-left: 24px;"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
+                <p class="nav-label">Away Team at Home Team</p>
+            </div>
+                
+            <div class="scorecard">
+                <div class="scorecard-game-info" style="border-radius: 0; margin-bottom: 0; display: flex; height: 40px;">
+                    <div class="live-tag">
+                        <p>LIVE</p>
+                    </div>
+                    <p style="margin: auto;"><span class="game-time">4:23</span><span class="quarter"></span></p>
+                </div>
+                <div class="scorecard-teams-container">
+                    <div class="scorecard-team-card left-team" style="width: 50%; border-radius: 0;">
+                        <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team">DEN</span><span class="scorecard-team-record" style="margin-left: 8px;">1-4</span></p>
+                        <p class="scorecard-score" id="score-player-team">10</p>
+                    </div>
+                    <div class="scorecard-team-card right-team" style="width: 50%; border-radius: 0;">
+                        <p style="margin: 4px;"><span class="scorecard-team-record" style="margin-right: 8px;">2-5</span><span class="scorecard-team" id="name-other-team">PAT</span></p>
+                        <p class="scorecard-score" id="score-other-team">8</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="loader"></div>
+
+        </div>
+
+        <div class="page-body">
+            <p class="subtitle">Storylines</p>
+
+
+
+        </div>
+
+        <script 
+
+        <script src="interactions.js"></script>
+
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+        <script>
+            // Your web app's Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyC5Hg9BK3TYLPEkEgicBjYnS0zqrJxEUdE",
+                authDomain: "hottake-af593.firebaseapp.com",
+                databaseURL: "https://hottake-af593.firebaseio.com",
+                projectId: "hottake-af593",
+                storageBucket: "hottake-af593.appspot.com",
+                messagingSenderId: "1022543631385",
+                appId: "1:1022543631385:web:90f7d0ae19d193c8ae4688"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);        
+        </script>        
+    </body>
+</html>
+
+<script>
+    // Set db
+    var db = firebase.firestore();
+
+    var playerTeamAbbreviation = "";
+    var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
+                , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
+                "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
+                "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
+                "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Kansas City Chiefs",
+                "Las Vegas Raiders", "Los Angeles Chargers", "Los Angeles Rams", "Miami Dolphins",
+                "New Orleans Saints", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
+                "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
+    var teamsAbbreviated = ["MIN", "NYG", "NE", "NYJ", "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", 
+                            "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC", "LV", "LAC", "LA", "MIA", "NO",
+                            "PHI", "PIT", "SF", "SEA", "TB", "TEN", "WAS"];
+    let teamColors = {
+        Cardinals: ["#97233F", "#FFB612"],
+        Falcons: ["#A71930", "#000000"],
+        Ravens: ["#241773", "#9E7C0C"],
+        Bills: ["#00338D", "#C60C30"],
+        Panthers: ["#0085CA", "#101820"],
+        Bears: ["#0B162A", "#C83803"],
+        Bengals: ["#FB4F14", "#000000"],
+        Browns: ["#311D00", "#FF3C00"],
+        Cowboys: ["#003594", "FFFFFF"],
+        Broncos: ["#FB4F14", "#002244"],
+        Lions: ["#0076B6", "#B0B7BC"],
+        Packers: ["#203731", "#FFB612"],
+        Texans: ["#03202F", "#A71930"],
+        Colts: ["#002C5F", "#A2AAAD"],
+        Jaguars: ["#006778", "#D7A22A"],
+        Chiefs: ["#E31837", "#FFB81C"],
+        Chargers: ["#FFC20E", "#0080C6"],
+        Rams: ["#003594", "#FFA300"],
+        Dolphins: ["#008E97", "#FC4C02"],
+        Vikings: ["#4F2683", "#FFC62F"],
+        Patriots: ["#002244", "#C60C30"],
+        Saints: ["#D3BC8D", "#101820"],
+        Giants: ["#0B2265", "#A71930"],
+        Jets: ["#125740", "#FFFFFF"],
+        Raiders: ["#000000", "#A5ACAF"],
+        Eagles: ["#004C54", "#A5ACAF"],
+        Steelers: ["#FFB612", "#101820"],
+        Niners: ["#AA0000", "#B3995D"],
+        Seahawks: ["#002244", "#69BE28"],
+        Buccaneers: ["#D50A0A", "#0A0A08"],
+        Titans: ["#0C2340", "#4B92DB"],
+        Washington: ["#773141", "#FFB612"]
+    };
+
+    // Firebase observer
+    firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var email = user.email;
+        console.log(email);
+        db.collection("users").doc(email).get().then(function(doc) {
+            if (doc.exists) {
+                console.log(doc.data().team);
+                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
+                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
+                for (var i = 0; i < teams.length; i++) {
+                    if (teams[i] == doc.data().team) {
+                        playerTeamAbbreviation = teamsAbbreviated[i];
+                        getScore();
+                    }
+                }
+            }
+        }).catch(function(error) {
+            console.error("Error getting user info: ", error);
+        });
+    } 
+    });
+
+    function getScore() {
+        $.ajax({
+            type: "GET",
+            url: "https://static.nfl.com/liveupdate/scorestrip/ss.xml",
+            success: function(results) {
+                console.log("Success");
+                displayScore(results)
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function displayScore(results) {
+        resultsList = results.getElementsByTagName("g");
+        for (var i = 0; i < resultsList.length; i++) {
+            result = resultsList[i];
+            console.log(result);
+            console.log(result.getAttribute("h"))
+            if (result.getAttribute("h") == playerTeamAbbreviation) {
+                console.log(result.getAttribute("hs"));
+                console.log(result.getAttribute("vs"));
+                document.getElementById("score-player-team").innerHTML = result.getAttribute("hs");
+                document.getElementById("score-other-team").innerHTML = result.getAttribute("vs");
+                document.getElementById("name-player-team").innerHTML = result.getAttribute("h")
+                document.getElementById("name-other-team").innerHTML = result.getAttribute("v")
+                if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
+                    result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
+                        document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+                    } 
+                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+                document.getElementsByClassName("game-date-time")[0].innerHTML = 
+                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
+                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+            } else if (result.getAttribute("v") == playerTeamAbbreviation) {
+                console.log(result.getAttribute("hs"));
+                console.log(result.getAttribute("vs"));
+                document.getElementById("score-player-team").innerHTML = result.getAttribute("vs");
+                document.getElementById("score-other-team").innerHTML = result.getAttribute("hs");
+                document.getElementById("name-player-team").innerHTML = result.getAttribute("v")
+                document.getElementById("name-other-team").innerHTML = result.getAttribute("h")
+                if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
+                    result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
+                        document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+                    } 
+                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+                document.getElementsByClassName("game-date-time")[0].innerHTML = 
+                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
+                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+            }
+        }
+    }
+
+</script>
