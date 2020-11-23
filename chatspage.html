@@ -133,84 +133,89 @@
                         me: me
                     });
                     var other = new Talk.User({
-                        id: "fake3",
-                        name: "Wyatt",
-                        email: "wyatt@example.com",
-                        photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
+                        id: "other",
+                        name: " ",
+                        email: "other@example.com",
+                        // photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
                         role: "fan_2"
                     });
                     var other2 = new Talk.User({
-                        id: "fak4",
-                        name: "Johnny",
-                        email: "johnny@example.com",
-                        photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
+                        id: "other2",
+                        name: " ",
+                        email: "other2@example.com",
+                        // photoUrl: "https://demo.talkjs.com/img/sebastian.jpg",
                         role: "fan_2",
                     });
                     // While loop through all possible rooms for chatTeam
                     // If more than 5 people in room, keep iterating through while loop until finding proper room
-                    var numberUsers = 0;
                     var i = 0;
-                    theWhileLoop: while(true) {
-                        i++;
-                        var conversationID = chatTeam.replaceAll(" ", "%20") + parseInt(i);
-                        console.log(conversationID);
-                        // Make PUT call to create rooms if they don't already exist
-                        $.ajax({
-                            type: "PUT",
-                            url: "https://api.talkjs.com/v1/tJDiNf9l/conversations/" + conversationID,
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader("Authorization", "Bearer sk_test_N6LHWpCwqqnF5rHmOsQbxHph")
-                            }, 
-                            data: {
-                                // "participants": [user.email, "fake3"],
-                                // "subject": "tset subject",
-                                // "welcomeMessages": "hi"
-                            },
-                            // cache: true,
-                            contentType:"application/json; charset=utf-8",
-                            dataType:"json",
-                            success: function(data){
-                                console.log(data);
-                            },
-                            error: function(xhr, status, error) {
-                                console.log("ERROR");
-                                alert(xhr.responseText);
-                            }
-                        });
-                        // Make GET call to get current number of users
-                        var breakingOut = false;
-                        $.ajax({
-                            type: "GET",
-                            url: "https://api.talkjs.com/v1/tJDiNf9l/conversations/" + conversationID,
-                            beforeSend: function(xhr) {
-                                xhr.setRequestHeader("Authorization", "Bearer sk_test_N6LHWpCwqqnF5rHmOsQbxHph")
-                            }, 
-                            cache: true,
-                            success: function(data){
-                                console.log(data);
-                                console.log(data.custom.numUsers);
-                                if (data.custom.numUsers < 5) {
-                                    console.log("Less than 5 users, break while loop");
-                                    numberUsers = data.custom.numUsers;
-                                    breakingOut = true;
+                    var breakingOut = false;
+                    function theWhileLoop() {
+                        setTimeout(function() {
+                            i++;
+                            var conversationID = chatTeam.replaceAll(" ", "%20") + parseInt(i);
+                            console.log(conversationID);
+                            console.log(breakingOut);
+                            // Make PUT call to create rooms if they don't already exist
+                            $.ajax({
+                                type: "PUT",
+                                url: "https://api.talkjs.com/v1/tJDiNf9l/conversations/" + conversationID,
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader("Authorization", "Bearer sk_test_N6LHWpCwqqnF5rHmOsQbxHph")
+                                }, 
+                                data: {
+                                },
+                                contentType:"application/json; charset=utf-8",
+                                dataType:"json",
+                                success: function(data){
+                                    console.log(data);
+                                },
+                                error: function(xhr, status, error) {
+                                    console.log("ERROR");
+                                    alert(xhr.responseText);
                                 }
+                            });
+                            // Make GET call to get current number of users
+                            $.ajax({
+                                type: "GET",
+                                url: "https://api.talkjs.com/v1/tJDiNf9l/conversations/" + conversationID,
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader("Authorization", "Bearer sk_test_N6LHWpCwqqnF5rHmOsQbxHph")
+                                }, 
+                                cache: true,
+                                success: function(data){
+                                    console.log(data);
+                                    console.log(data.participants);
+                                    var participants = data.participants;
+                                    console.log(participants);
+                                    var participantsLength = 0;
+                                    for (var participant in participants) {
+                                        participantsLength++;
+                                    }
+                                    console.log(participantsLength);
+                                    if (participantsLength < 5) {
+                                        console.log("Less than 5 users, break while loop");
+                                        breakingOut = true;
+                                    }
+                                }
+                            });
+                            if (! (i > 10 || breakingOut)) {
+                                theWhileLoop();
                             }
-                        });
-                        if (breakingOut) {
-                            break theWhileLoop;
-                        }
-                        if (i > 10) {
-                            console.log("its infinite");
-                            break theWhileLoop; 
-                        }
+                        }, 500)
                     }
+                    theWhileLoop();
                     var currentConversationID = chatTeam + parseInt(i);
                     var conversation = talkSession.getOrCreateConversation(currentConversationID);
-                    var newNumUsers = numberUsers + 1;
                     conversation.setAttributes({
                         subject: currentConversationID,
                         // custom: { "numUsers": parseInt(newNumUsers) }
                     });
+                    // conversation.setAttributes({custom:
+                    // {
+                    //     numUsers: "test"
+                    // }
+                    // });
                     conversation.setParticipant(me);
                     conversation.setParticipant(other);
                     conversation.setParticipant(other2);
