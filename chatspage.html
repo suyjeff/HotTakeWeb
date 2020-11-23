@@ -150,7 +150,9 @@
                     // If more than 5 people in room, keep iterating through while loop until finding proper room
                     var i = 0;
                     var breakingOut = false;
+                    console.log("About to enter while");
                     async function theWhileLoop() {
+                        console.log("Entered while");
                         setTimeout(async function() {
                             i++;
                             var conversationID = chatTeam.replaceAll(" ", "%20") + parseInt(i);
@@ -199,7 +201,7 @@
                                     }
                                 }
                             });
-                            if (i > 10 || breakingOut) {
+                            if (i > 5 || breakingOut) {
                                 console.log("Breaking while loop");
                                 theWhileLoop();
                             }
