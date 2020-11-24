@@ -187,6 +187,7 @@
                     // If more than 5 people in room, keep iterating through while loop until finding proper room
                     var i = 0;
                     var breakingOut = false;
+                    var numUsers = 0;
                     console.log("About to enter while");
                     async function theWhileLoop() {
                         console.log("Entered while");
@@ -224,38 +225,34 @@
                                 cache: true,
                                 success: function(data){
                                     console.log(data);
-                                    console.log(data.participants);
-                                    var participants = data.participants;
-                                    console.log(participants);
-                                    var participantsLength = 0;
-                                    for (var participant in participants) {
-                                        participantsLength++;
-                                    }
-                                    console.log(participantsLength);
-                                    if (participantsLength < 5) {
-                                        console.log("Less than 5 users, break while loop");
+                                    numUsers = data.custom.numUsers;
+                                    console.log(numUsers);
+                                    if (numUsers < 3) {
+                                        console.log("Less than 3 users, break while loop");
                                         breakingOut = true;
                                     }
                                 }
                             });
-                            if (i > 5 || breakingOut) {
+                            if (i > 10 || breakingOut) {
                                 console.log("Breaking while loop");
                                 theWhileLoop();
                             }
                         }, 500)
                     }
                     theWhileLoop();
+                    numUsers++;
+                    var numUsersString = numUsers.toString();
                     var currentConversationID = chatTeam + parseInt(i);
                     var conversation = talkSession.getOrCreateConversation(currentConversationID);
                     conversation.setAttributes({
                         subject: currentConversationID,
-                        // custom: { "numUsers": parseInt(newNumUsers) }
                     });
-                    // conversation.setAttributes({custom:
-                    // {
-                    //     numUsers: "test"
-                    // }
-                    // });
+                    conversation.setAttributes({custom:
+                    {
+                        // numUsers: parseInt(numUsers + 1)
+                        numUsers: numUsersString
+                    }
+                    });
                     conversation.setParticipant(me);
                     conversation.setParticipant(other);
                     conversation.setParticipant(other2);
