@@ -320,6 +320,10 @@
         resultsList = results.getElementsByTagName("g");
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
+            if (chatTeam.substring(0, 1) == "=") {
+                playerTeamAbbreviation = chatTeam.substring(1, 3);
+            }
+            console.log(playerTeamAbbreviation);
             if (result.getAttribute("h") == playerTeamAbbreviation) {
                 console.log("Home team is player team");
                 console.log(result.getAttribute("hs"));
@@ -342,9 +346,13 @@
                 + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
                 // Styling for nav bar
-                document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("h") + " Chat";
-                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("h")][0];
-                document.getElementsByClassName("nav-bar")[0].style.color = teamColors[result.getAttribute("h")][1];
+                if (chatTeam.substring(0, 1) != "=") {
+                    document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("h") + " Chat";
+                    document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("h")][0];
+                    document.getElementsByClassName("nav-bar")[0].style.color = teamColors[result.getAttribute("h")][1];
+                } else {
+                    document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("h") + " vs. " + result.getAttribute("v") + " Chat";
+                }
             } else if (result.getAttribute("v") == playerTeamAbbreviation) {
                 console.log("Away team is player team");
                 console.log(result.getAttribute("hs"));
@@ -367,9 +375,13 @@
                 + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
                 // Styling for nav bar
-                document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("v") + " Chat";
-                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementsByClassName("nav-bar")[0].style.color = teamColors[result.getAttribute("v")][1];
+                if (chatTeam.substring(0, 1) != "=") {
+                    document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("v") + " Chat";
+                    document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
+                    document.getElementsByClassName("nav-bar")[0].style.color = teamColors[result.getAttribute("v")][1];
+                } else {
+                    document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("h") + " vs. " + result.getAttribute("v") + " Chat";
+                }
             }
             if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
                 result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
