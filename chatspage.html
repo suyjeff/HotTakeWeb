@@ -225,7 +225,7 @@
                                 cache: true,
                                 success: function(data){
                                     console.log(data);
-                                    if (data.custom.numUsers != null) {
+                                    if (data.custom.users != undefined) {
                                         numUsers = data.custom.numUsers;
                                         console.log(numUsers);
                                         if (numUsers < 3) {
