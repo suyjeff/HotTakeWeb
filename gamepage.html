@@ -7,6 +7,7 @@
         <link href="styles.css" rel="stylesheet" type="text/css" media="all">
         <link href="app.css" rel="stylesheet" type="text/css" media="all">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.typekit.net/nwy3jid.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
@@ -25,7 +26,7 @@
                 <p class="nav-label"></p>
             </div>
                 
-            <div class="scorecard">
+            <div class="scorecard" style="display: none;">
                 <div class="scorecard-game-info" style="border-radius: 0; margin-bottom: 0; display: flex; height: 40px;">
                     <div class="live-tag">
                         <p>LIVE</p>
@@ -48,23 +49,22 @@
 
         </div>
 
-        <div class="page-body">
+        <div class="page-body" id="gamepage-content" style="display: none;">
             <br>
             <div class="chat-list-item">
                 <img class="team-image" src="" alt="Team Image 1">
                 <div style="text-align: center; margin-left: 35px;">
                     <p class="team-name">Team Name</p>
-                    <p class="members">People in Chat</p>
+                    <p class="members">Gametime Chat</p>
                 </div>
                 <img class="team-image" src="" alt="Team Image 2" style="margin-left: auto;">
             </div>
             <p class="subtitle">Storylines</p>
+            <div class="storyline-list">
 
-
+            </div>
 
         </div>
-
-        <script src="tweetjs.js"></script>
 
         <script src="interactions.js"></script>
 
@@ -181,6 +181,10 @@
 
     function displayScore(results) {
         resultsList = results.getElementsByTagName("g");
+
+        var homeTeam = "";
+        var awayTeam = "";
+
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
             console.log(result);
@@ -205,6 +209,14 @@
                 result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
                 + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+                // Styling for chat button
+                document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
+                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
+                document.getElementsByClassName("team-image")[1].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("v"))] + ".png";
+                var gameQuery = result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
+                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1);
+                homeTeam = result.getAttribute("h");
+                awayTeam = result.getAttribute("v");
             } else if (result.getAttribute("v") == playerTeamAbbreviation) {
                 console.log(result.getAttribute("hs"));
                 console.log(result.getAttribute("vs"));
@@ -225,6 +237,14 @@
                 result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
                 + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+                // Styling for chat button
+                document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
+                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
+                document.getElementsByClassName("team-image")[1].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("v"))] + ".png";
+                var gameQuery = result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
+                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1);
+                homeTeam = result.getAttribute("h");
+                awayTeam = result.getAttribute("v");
             }
             if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
                 result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
@@ -232,14 +252,61 @@
             } else {
                 document.getElementsByClassName("live-tag")[0].style.display = "none";
             }
-            // Styling for chat button
-            document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
-            document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
-            document.getElementsByClassName("team-image")[1].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("v"))] + ".png";
-            document.getElementsByClassName("chat-list-item")[0].addEventListener("click", function(event) {
-                var teams = result.getAttribute("h") + "_" + result.getAttribute("v");
-                setTimeout(() => { location.href= "chatspage.html?Xteam=" + teams.replace(" ", "_"); }, 500);
-            }, false);
         }
+
+        document.getElementsByClassName("chat-list-item")[0].addEventListener("click", function(event) {
+                    var teams = homeTeam + "_" + awayTeam;
+                    setTimeout(() => { location.href= "chatspage.html?Xteam=" + teams.replace(" ", "_"); }, 500);
+                }, false);
+
+        console.log(gameQuery);
+
+        TweetJs = {
+            ListTweetsOnUserTimeline : function(screenName, callback) {
+                TweetJs._callApi({
+                        Action: "ListTweetsOnUserTimeline",
+                        ScreenName: screenName
+                    },
+                callback);
+            },
+            Search: function (query, callback) {
+                TweetJs._callApi({
+                    Action: "Search",
+                    Query: query
+                }, callback);
+            },
+            _callApi: function (request, callback) {
+                var xhr = new XMLHttpRequest();
+                URL = "https://www.tweetjs.com/API.aspx"; 
+                xhr.open("POST", URL);
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        callback(JSON.parse(xhr.response));
+                    }
+                }
+                xhr.send(JSON.stringify(request));
+            }
+        };
+
+        TweetJs.Search(gameQuery,
+        function (data) {
+            // console.log(data);
+            for (let i=0; i<data.statuses.length;i++) {
+                createStoryItem(data.statuses[i]);
+            }
+        });
+
+        function createStoryItem(data) {
+            var story_item = document.createElement("div");
+            story_item.setAttribute("class", "storyline-item");
+            story_item.setAttribute("id", data.id);
+            var story_text = document.createElement("span");
+            story_text.innerText = data.text;
+            // console.log(data.text);
+            story_item.append(story_text);
+            document.getElementsByClassName("storyline-list")[0].append(story_item);
+        }
+
     }
+
 </script>

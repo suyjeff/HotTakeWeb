@@ -7,6 +7,7 @@
         <link href="styles.css" rel="stylesheet" type="text/css" media="all">
         <link href="app.css" rel="stylesheet" type="text/css" media="all">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.typekit.net/nwy3jid.css">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
@@ -19,20 +20,20 @@
     <body>
         
         <div class="page-body" style="width: 100% !important;">
-            <div class="chat-score-display" style="height: 160px;">
+            <div class="chat-score-display" style="height: 160px; background: none;">
                 <div class="scorecard">
                     <div class="game-date-time-container no-border">
                         <p class="game-date-time"></p>
                     </div>
-                    <div class="scorecard-game-info" style="border-radius: 0 !important;">
+                    <div class="scorecard-game-info" style="border-radius: 0 !important; padding-top: 24px;">
                         <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
                     </div>
                     <div class="scorecard-teams-container">
-                        <div class="scorecard-team-card left-team chat-team-card ctc-l">
+                        <div class="scorecard-team-card left-team chat-team-card ctc-l" style="width: 50%; border-radius: 0;">
                             <p class="scorecard-score" id="score-home-team">-</p>
                             <p class="home-team"><span class="scorecard-team" id="name-home-team"></span><span class="scorecard-team-record"></span></p>
                         </div>
-                        <div class="scorecard-team-card right-team chat-team-card ctc-r">
+                        <div class="scorecard-team-card right-team chat-team-card ctc-r" style="width: 50%; border-radius: 0;">
                             <p class="away-team"><span class="scorecard-team" id="name-away-team"></span><span class="scorecard-team-record"></span></p>
                             <p class="scorecard-score" id="score-away-team">-</p>
                         </div>
@@ -321,7 +322,7 @@
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
             if (chatTeam.substring(0, 1) == "=") {
-                playerTeamAbbreviation = chatTeam.substring(1, 3);
+                playerTeamAbbreviation = chatTeam.substring(1, chatTeam.indexOf(" "));
             }
             console.log(playerTeamAbbreviation);
             if (result.getAttribute("h") == playerTeamAbbreviation) {
