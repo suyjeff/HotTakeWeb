@@ -240,27 +240,6 @@
                                         breakingOut = true;
                                     }
                                 }
-                                .then(function() {
-                                    numUsers++;
-                                    var numUsersString = numUsers.toString();
-                                    var currentConversationID = chatTeam + parseInt(i);
-                                    var conversation = talkSession.getOrCreateConversation(currentConversationID);
-                                    conversation.setAttributes({
-                                        subject: currentConversationID,
-                                    });
-                                    conversation.setAttributes({custom:
-                                    {
-                                        // numUsers: parseInt(numUsers + 1)
-                                        numUsers: numUsersString
-                                    }
-                                    });
-                                    conversation.setParticipant(me);
-                                    conversation.setParticipant(other);
-                                    conversation.setParticipant(other2);
-                                    console.log(conversation);
-                                    var inbox = talkSession.createInbox({selected: conversation});
-                                    inbox.mount(document.getElementById("talkjs-container"));
-                                })
                             });
                             console.log("About to check breakingOut");
                             if (i > 10 || breakingOut) {
@@ -272,7 +251,7 @@
                         }, 500)
                     }
                     await theWhileLoop();
-                    /*setTimeout(function() {
+                    setTimeout(function() {
                         // Delay
                         numUsers++;
                         var numUsersString = numUsers.toString();
@@ -295,7 +274,6 @@
                         inbox.mount(document.getElementById("talkjs-container"));
                     });
                 }, 5000);
-                */
                 for (var i = 0; i < teams.length; i++) {
                     if (teams[i] == chatTeam) {
                         playerTeamAbbreviation = teamsAbbreviated[i];
@@ -358,10 +336,6 @@
                 result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
                 + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
-                // Styling for nav bar
-                document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("h") + " Chat";
-                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("h")][0];
-                document.getElementsByClassName("nav-bar")[0].style.color = teamColors[result.getAttribute("h")][1];
             } else if (result.getAttribute("v") == playerTeamAbbreviation) {
                 console.log("Away team is player team");
                 console.log(result.getAttribute("hs"));
@@ -383,10 +357,6 @@
                 result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
                 + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
-                // Styling for nav bar
-                document.getElementsByClassName("nav-label")[0].innerHTML = result.getAttribute("v") + " Chat";
-                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementsByClassName("nav-bar")[0].style.color = teamColors[result.getAttribute("v")][1];
             }
             if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
                 result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
