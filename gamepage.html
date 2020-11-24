@@ -298,6 +298,10 @@
         });
 
         function createStoryItem(data) {
+
+            var tweetSubstring = data.text.substr(0, data.text.indexOf('https://tweetjs'));
+            console.log(tweetSubstring);
+
             var story_item = document.createElement("div");
             story_item.setAttribute("class", "storyline-item");
             story_item.setAttribute("id", data.id);
@@ -313,7 +317,7 @@
             topline.append(topline_author);
             story_item.append(topline);
             var story_text = document.createElement("span");
-            story_text.innerText = data.text;
+            story_text.innerText = tweetSubstring;
             // console.log(data.text);
             story_item.append(story_text);
             document.getElementsByClassName("storyline-list")[0].append(story_item);
