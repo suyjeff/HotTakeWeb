@@ -224,8 +224,9 @@
                                 cache: true,
                                 success: function(data){
                                     console.log(data);
-                                    console.log(data.custom);
-                                    console.log(data.custom.users);
+                                    console.log(JSON.stringify(data.custom));
+                                    numUsers = JSON.stringify(data.custom).substring(13, 14);
+                                    console.log(numUsers);
                                     if (data.custom.users != undefined) {
                                         console.log("Users isn't undefined");
                                         numUsers = data.custom.numUsers;
