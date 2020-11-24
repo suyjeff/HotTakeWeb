@@ -125,9 +125,14 @@
         WAS: ["#773141", "#FFB612"]
     };
 
-
+    var twoTeams = false;
     if(window.location.search.length > 0) {
-        chatTeam = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
+        if (window.location.search.substring(0, 1) == "X") {
+            twoTeams = true;
+            chatTeam = window.location.search.substring(7).replace("_", " ").replace("%20", " ");
+        } else {
+            chatTeam = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
+        }
     }
 
     var playerTeamAbbreviation = "";
