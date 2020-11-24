@@ -225,11 +225,13 @@
                                 cache: true,
                                 success: function(data){
                                     console.log(data);
-                                    numUsers = data.custom.numUsers;
-                                    console.log(numUsers);
-                                    if (numUsers < 3) {
-                                        console.log("Less than 3 users, break while loop");
-                                        breakingOut = true;
+                                    if (data.custom.numUsers != null) {
+                                        numUsers = data.custom.numUsers;
+                                        console.log(numUsers);
+                                        if (numUsers < 3) {
+                                            console.log("Less than 3 users, break while loop");
+                                            breakingOut = true;
+                                        }
                                     }
                                 }
                             });
