@@ -158,6 +158,7 @@
                 // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
                 Talk.ready.then(async function() {
+                    console.log("start of this");
                     var me = new Talk.User({
                         id: user.email,
                         name: user.displayName,
