@@ -226,7 +226,7 @@
                                 success: function(data){
                                     console.log(data);
                                     if (data.custom.users != undefined) {
-                                        console.log("Users is undefined");
+                                        console.log("Users isn't undefined");
                                         numUsers = data.custom.numUsers;
                                         console.log(numUsers);
                                         if (numUsers < 3) {
@@ -234,7 +234,7 @@
                                             breakingOut = true;
                                         }
                                     } else {
-                                        console.log("Users isn't undefined");
+                                        console.log("Users is undefined");
                                         breakingOut = true;
                                     }
                                 }
