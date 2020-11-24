@@ -59,7 +59,8 @@
                 </div>
                 <img class="team-image" src="" alt="Team Image 2" style="margin-left: auto;">
             </div>
-            <p class="subtitle">Storylines</p>
+            <p class="subtitle" style="margin-bottom: 0px;">Storylines</p>
+            <p class="sub-line">See insights from around the league on the game</p>
             <div class="storyline-list">
 
             </div>
@@ -290,7 +291,7 @@
 
         TweetJs.Search(gameQuery,
         function (data) {
-            // console.log(data);
+            console.log(data);
             for (let i=0; i<data.statuses.length;i++) {
                 createStoryItem(data.statuses[i]);
             }
@@ -300,6 +301,17 @@
             var story_item = document.createElement("div");
             story_item.setAttribute("class", "storyline-item");
             story_item.setAttribute("id", data.id);
+            var topline = document.createElement("div");
+            topline.setAttribute("class", "topline");
+            var topline_label = document.createElement("span");
+            topline_label.innerText = "NFL";
+            topline.append(topline_label);
+            var topline_author = document.createElement("span");
+            topline_author.setAttribute("class", "topline-author");
+            topline_author.setAttribute("style", "margin-left: auto; font-weight: 400;");
+            topline_author.innerText = "@" + data.user.screen_name;
+            topline.append(topline_author);
+            story_item.append(topline);
             var story_text = document.createElement("span");
             story_text.innerText = data.text;
             // console.log(data.text);

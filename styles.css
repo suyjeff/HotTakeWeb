@@ -4,6 +4,10 @@ body {
     background-color: #FF347F;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 .onboard {
     width: 87%;
     height: 100vh;
@@ -50,13 +54,13 @@ body {
 }
 
 .main-button {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     width: 100%;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 20px;
     background-color: white;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 20px;
     line-height: 28px;
     /* identical to box height, or 140% */
@@ -67,6 +71,7 @@ body {
 
 #log-in-content {
     padding-top: 20px;
+    margin-top: 50px;
 }
 
 #log-in-small {
@@ -91,7 +96,8 @@ body {
 }
 
 .onboard-text {
-    font-weight: 600;
+    font-family: Space Grotesk;
+    font-weight: 700;
     font-size: 24px;
     line-height: 32px;
     /* or 117% */
@@ -116,6 +122,7 @@ body {
 }
 
 #create-account-form label {
+    font-family: Space Grotesk;
     font-weight: normal;
     font-size: 13px;
     line-height: 16px;

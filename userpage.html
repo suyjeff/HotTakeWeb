@@ -27,12 +27,11 @@
                 <div id="profile-header">
                     <div style="float: left;">
                         <div class="profile-picture">
-
                         </div>
                     </div>
                     <div class="profile-user-info">
-                        <p class="profile-name"></p>
                         <p class="profile-username">Set Display Name</p>
+                        <p class="profile-name"></p>
                     </div>
                 </div>
                 <p class="subtitle">Member of</p>
@@ -41,10 +40,10 @@
                     <img class="team-image" src="" alt="Team Image">
                     <div>
                         <p class="team-name">Team Name</p>
-                        <p class="members">People in Chat</p>
+                        <p class="members">Fan Hub</p>
                     </div>
                 </div>
-                <p class="subtitle">Settings</p>
+                <p class="subtitle">Preferences</p>
                 <div id="settings-container">
                     <button class="settings-button" id="change-team-button">Change Team</button>
                     <button class="settings-button" id="change-name-button">Change Display Name</button>
@@ -136,8 +135,8 @@
                 var imageLocation = user.email.replace("@", "%40");
                 var img = document.createElement("img");
                 img.src = "https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2F" + imageLocation + "?alt=media&token=https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2Fihufbsgioio%40gmail.com?alt=media";
-                img.setAttribute("width", 70);
-                img.setAttribute("height", 70);
+                img.setAttribute("width", 100);
+                img.setAttribute("height", 100);
                 document.getElementsByClassName("profile-picture")[0].appendChild(img);
             }
         }).catch(function(error) {
@@ -203,8 +202,8 @@
         var img = document.createElement("img");
         setTimeout(() => { 
             img.src = "https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2F" + imageLocation + "?alt=media&token=https://firebasestorage.googleapis.com/v0/b/hottake-af593.appspot.com/o/pfps%2Fihufbsgioio%40gmail.com?alt=media";
-            img.setAttribute("width", 70);
-            img.setAttribute("height", 70);
+            img.setAttribute("width", 100);
+            img.setAttribute("height", 100);
             document.getElementsByClassName("profile-picture")[0].appendChild(img);
          }, 500);
     });
