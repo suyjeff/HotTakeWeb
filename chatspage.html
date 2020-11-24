@@ -192,7 +192,6 @@
                     async function theWhileLoop() {
                         console.log("Entered while");
                         setTimeout(async function() {
-                            i++;
                             var conversationID = chatTeam.replaceAll(" ", "%20") + parseInt(i);
                             console.log(conversationID);
                             console.log(breakingOut);
@@ -241,6 +240,7 @@
                                     }
                                 }
                             });
+                            i++;
                             console.log("About to check breakingOut");
                             if (i > 10 || breakingOut) {
                                 console.log("Breaking while loop");
