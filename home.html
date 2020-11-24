@@ -24,7 +24,8 @@
         <div class="page-body">
             <p class="page-title-large">What's Hot</p>
             <div class="tab-page" style="display: none;">
-                <p class="subtitle">Scores</p>
+                <p class="subtitle" style="margin-bottom: 0;">Scores</p>
+                <p class="sub-line">View the latest scores of your favorite teams, tap on the game score to read more and join the game chat.</p>
                 <div class="scorecard">
                     <div class="game-date-time-container">
                         <p class="game-date-time"></p>
@@ -52,6 +53,11 @@
                         <p class="team-name">Team Name</p>
                         <p class="members">Fan Hub</p>
                     </div>
+                </div>
+                <p class="subtitle" style="margin-bottom: 0;">The Latest</p>
+                <p class="sub-line" style="margin-bottom: 20px;">Read the latest from around the league on your team</p>
+                <div class="storyline-list">
+
                 </div>
             </div>
             <div class="loader"></div>
@@ -99,6 +105,7 @@
 <script>
     // Set db
     var db = firebase.firestore();
+    var latestQuery = "";
 
     var playerTeamAbbreviation = "";
     var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
@@ -155,6 +162,7 @@
         db.collection("users").doc(email).get().then(function(doc) {
             if (doc.exists) {
                 console.log(doc.data().team);
+                latestQuery = doc.data().team;
                 document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
                 for (var i = 0; i < teams.length; i++) {
@@ -214,6 +222,71 @@
                 document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
             }
         }
+
+        console.log(latestQuery);
+
+        TweetJs = {
+            ListTweetsOnUserTimeline : function(screenName, callback) {
+                TweetJs._callApi({
+                        Action: "ListTweetsOnUserTimeline",
+                        ScreenName: screenName
+                    },
+                callback);
+            },
+            Search: function (query, callback) {
+                TweetJs._callApi({
+                    Action: "Search",
+                    Query: query
+                }, callback);
+            },
+            _callApi: function (request, callback) {
+                var xhr = new XMLHttpRequest();
+                URL = "https://www.tweetjs.com/API.aspx"; 
+                xhr.open("POST", URL);
+                xhr.onreadystatechange = function () {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        callback(JSON.parse(xhr.response));
+                    }
+                }
+                xhr.send(JSON.stringify(request));
+            }
+        };
+
+        TweetJs.Search(latestQuery,
+        function (data) {
+            console.log(data);
+            for (let i=0; i<5;i++) {
+                createStoryItem(data.statuses[i]);
+            }
+        });
+
+        function createStoryItem(data) {
+
+            var tweetSubstring = data.text.substr(0, data.text.indexOf('https://tweetjs'));
+            console.log(tweetSubstring);
+
+            var story_item = document.createElement("div");
+            story_item.setAttribute("class", "storyline-item");
+            story_item.setAttribute("id", data.id);
+            var topline = document.createElement("div");
+            topline.setAttribute("class", "topline");
+            var topline_label = document.createElement("span");
+            topline_label.innerText = playerTeamAbbreviation;
+            topline.append(topline_label);
+            var topline_author = document.createElement("span");
+            topline_author.setAttribute("class", "topline-author");
+            topline_author.setAttribute("style", "margin-left: auto; font-weight: 400;");
+            topline_author.innerText = "@" + data.user.screen_name;
+            topline.append(topline_author);
+            story_item.append(topline);
+            var story_text = document.createElement("span");
+            story_text.innerText = tweetSubstring;
+            // console.log(data.text);
+            story_item.append(story_text);
+            document.getElementsByClassName("storyline-list")[0].append(story_item);
+        }
+
+
     }
 
 </script>
