@@ -22,7 +22,7 @@
 
             <div class="nav-bar" style="margin-top: 0; background-color: black;">
                 <a class="back-btn" href="home.html" style="margin-left: 24px;"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
-                <p class="nav-label">Away Team at Home Team</p>
+                <p class="nav-label"></p>
             </div>
                 
             <div class="scorecard">
@@ -198,9 +198,9 @@
                 document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("game-date-time")[0].innerHTML = 
-                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
-                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                document.getElementsByClassName("nav-label")[0].innerHTML = 
+                result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
+                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
             } else if (result.getAttribute("v") == playerTeamAbbreviation) {
                 console.log(result.getAttribute("hs"));
@@ -218,9 +218,9 @@
                 document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
                 document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("game-date-time")[0].innerHTML = 
-                result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
-                + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
+                document.getElementsByClassName("nav-label")[0].innerHTML = 
+                result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
+                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
             }
             if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
