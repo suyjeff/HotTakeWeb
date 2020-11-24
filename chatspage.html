@@ -157,7 +157,7 @@
                 console.log(chatTeam);
                 // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
-                Talk.ready.then(function() {
+                Talk.ready.then(async function() {
                     var me = new Talk.User({
                         id: user.email,
                         name: user.displayName,
@@ -216,7 +216,7 @@
                                 }
                             });
                             // Make GET call to get current number of users
-                            $.ajax({
+                            var whatever = await $.ajax({
                                 type: "GET",
                                 url: "https://api.talkjs.com/v1/tJDiNf9l/conversations/" + conversationID,
                                 beforeSend: function(xhr) {
@@ -226,6 +226,7 @@
                                 success: function(data){
                                     console.log(data);
                                     if (data.custom.users != undefined) {
+                                        console.log("Users is undefined");
                                         numUsers = data.custom.numUsers;
                                         console.log(numUsers);
                                         if (numUsers < 3) {
@@ -233,17 +234,20 @@
                                             breakingOut = true;
                                         }
                                     } else {
+                                        console.log("Users isn't undefined");
                                         breakingOut = true;
                                     }
                                 }
                             });
+                            console.log("About to check breakingOut");
                             if (i > 10 || breakingOut) {
                                 console.log("Breaking while loop");
+                            } else {
                                 theWhileLoop();
                             }
                         }, 500)
                     }
-                    theWhileLoop();
+                    await theWhileLoop();
                     numUsers++;
                     var numUsersString = numUsers.toString();
                     var currentConversationID = chatTeam + parseInt(i);
@@ -303,8 +307,6 @@
     }
     function displayScore(results) {
         resultsList = results.getElementsByTagName("g");
-        console.log("player team abbrev:");
-        console.log(playerTeamAbbreviation);
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
             if (result.getAttribute("h") == playerTeamAbbreviation) {
