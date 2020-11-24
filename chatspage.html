@@ -253,28 +253,27 @@
                     await theWhileLoop();
                     setTimeout(function() {
                         // Delay
-                        console.log("Hi");
-                    }, 5000);
-                    numUsers++;
-                    var numUsersString = numUsers.toString();
-                    var currentConversationID = chatTeam + parseInt(i);
-                    var conversation = talkSession.getOrCreateConversation(currentConversationID);
-                    conversation.setAttributes({
-                        subject: currentConversationID,
+                        numUsers++;
+                        var numUsersString = numUsers.toString();
+                        var currentConversationID = chatTeam + parseInt(i);
+                        var conversation = talkSession.getOrCreateConversation(currentConversationID);
+                        conversation.setAttributes({
+                            subject: currentConversationID,
+                        });
+                        conversation.setAttributes({custom:
+                        {
+                            // numUsers: parseInt(numUsers + 1)
+                            numUsers: numUsersString
+                        }
+                        });
+                        conversation.setParticipant(me);
+                        conversation.setParticipant(other);
+                        conversation.setParticipant(other2);
+                        console.log(conversation);
+                        var inbox = talkSession.createInbox({selected: conversation});
+                        inbox.mount(document.getElementById("talkjs-container"));
                     });
-                    conversation.setAttributes({custom:
-                    {
-                        // numUsers: parseInt(numUsers + 1)
-                        numUsers: numUsersString
-                    }
-                    });
-                    conversation.setParticipant(me);
-                    conversation.setParticipant(other);
-                    conversation.setParticipant(other2);
-                    console.log(conversation);
-                    var inbox = talkSession.createInbox({selected: conversation});
-                    inbox.mount(document.getElementById("talkjs-container"));
-                });
+                }, 5000);
                 for (var i = 0; i < teams.length; i++) {
                     if (teams[i] == chatTeam) {
                         playerTeamAbbreviation = teamsAbbreviated[i];
