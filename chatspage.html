@@ -241,11 +241,11 @@
                                     }
                                 }
                             });
-                            i++;
                             console.log("About to check breakingOut");
                             if (i > 10 || breakingOut) {
                                 console.log("Breaking while loop");
                             } else {
+                                i++;
                                 theWhileLoop();
                             }
                         }, 500)
