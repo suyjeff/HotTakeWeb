@@ -30,14 +30,11 @@
             </div>
         </div>    
 
-
+        <!-- Include outside scripts -->
+        <script src="includedContent.js"></script>
         <script src="interactions.js"></script>
-
-        <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
-        <!-- Add Firebase products that you want to use -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
@@ -63,18 +60,7 @@
     // Set db
     var db = firebase.firestore();
 
-    // Create teams buttons
-    var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
-                , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
-                "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
-                "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
-                "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Kansas City Chiefs",
-                "Las Vegas Raiders", "Los Angeles Chargers", "Los Angeles Rams", "Miami Dolphins",
-                "New Orleans Saints", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
-                "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
-    var teamsAbbreviated = ["MIN", "NYG", "NE", "NYJ", "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", 
-                            "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC", "LV", "LAC", "LA", "MIA", "NO",
-                            "PHI", "PIT", "SF", "SEA", "TB", "TEN", "WAS"];
+    // Create team buttons
     for(var i = 0; i < teams.length; i++) {
         console.log(i);
         document.getElementById("teams-div").innerHTML += 
@@ -88,24 +74,11 @@
             "</div>" + 
         "</button>";
     }
-
-    // TeamButton class
     var teamButtons = document.getElementsByClassName("team-button");
-    class TeamButton {
-        constructor(index) {
-            this.index = index;
-            const btn = teamButtons[index];
-            btn.addEventListener('click', this);
-            this.teamName = btn.firstChild.firstChild.innerHTML;
-        }
-        handleEvent(event) {
-            addTeam(this.teamName);
-        }
-    }
 
     // Event listener for team buttons
     for(var i = 0; i < teamButtons.length; i++) {
-        new TeamButton(i);
+        new JoinTeamButton(i);
     }
 
     // Add team to Cloud Firestore if user is signed in
