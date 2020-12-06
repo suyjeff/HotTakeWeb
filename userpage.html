@@ -43,6 +43,30 @@
                         <p class="members">Fan Hub</p>
                     </div>
                 </div>
+                <p class="subtitle">Friends</p>
+                <!-- Add friends list here -->
+                <div class="chat-list-item">
+                    <div id="friends-div"> 
+                        <!-- <p class="team-name">Test Friend</p> -->
+                    </div>
+                </div>
+                <button class="settings-button" id="add-friend-button">Send Friend Request</button>
+                <div id="requests-sent">
+                    <p class="subtitle">Friend Requests Sent</p>
+                    <!-- Add list of sent friend requests here -->
+                    <div class="chat-list-item">
+                        <div id="friend-requests-sent-div"> 
+                        </div>
+                    </div>
+                </div>
+                <div id="requests-received">
+                    <p class="subtitle">Friend Requests Received</p>
+                    <!-- Add list of received friend requests here -->
+                    <div class="chat-list-item">
+                        <div id="friend-requests-received-div"> 
+                        </div>
+                    </div>
+                </div>
                 <p class="subtitle">Preferences</p>
                 <div id="settings-container">
                     <button class="settings-button" id="change-team-button">Change Team</button>
@@ -68,6 +92,13 @@
                 <img class="tab-bar-img" src="assets/icons/user_icon.svg" alt="User Icon">
             </div>
         </div>
+        <!-- Breaks to make page scrollable and not hidden by navbar -->
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
         <!-- Include outside scripts -->
         <script src="includedContent.js"></script>
         <script src="interactions.js"></script>
@@ -127,6 +158,41 @@
                 img.setAttribute("width", 100);
                 img.setAttribute("height", 100);
                 document.getElementsByClassName("profile-picture")[0].appendChild(img);
+                // Display list of friends
+                console.log(doc.data().friends);
+                if (doc.data().friends != null) {
+                    for (var i = 0; i < doc.data().friends.length; i++) {
+                        var friendNode = document.createElement("p");
+                        friendNode.innerHTML = doc.data().friends[i];
+                        friendNode.setAttribute("class", "team-name");
+                        document.getElementById("friends-div").appendChild(friendNode);
+                    }
+                }
+                // Display list of friend requests sent, display nothing if no friend requests have been sent
+                if (doc.data().friendRequestsSent != null) {
+                    for (var i = 0; i < doc.data().friendRequestsSent.length; i++) {
+                        var friendRequestSentNode = document.createElement("p");
+                        friendRequestSentNode.innerHTML = doc.data().friendRequestsSent[i];
+                        friendRequestSentNode.setAttribute("class", "team-name");
+                        document.getElementById("friend-requests-sent-div").appendChild(friendRequestSentNode);
+                    }
+                } else {
+                    document.getElementById("requests-sent").style.display = "none";
+                }
+                // Display list of friend reqeuests received, display nothing if no friend requests have been received
+                console.log(doc.data().friendRequestsReceived);
+                console.log(doc.data());
+                if (doc.data().friendRequestsReceived != null) {
+                    for (var i = 0; i < doc.data().friendRequestsReceived.length; i++) {
+                        var friendRequestReceivedNode = document.createElement("p");
+                        friendRequestReceivedNode.innerHTML = doc.data().friendRequestsReceived[i];
+                        friendRequestReceivedNode.setAttribute("class", "team-name friend-request");
+                        document.getElementById("friend-requests-received-div").appendChild(friendRequestReceivedNode);
+                    }
+                } else {
+                    document.getElementById("requests-received").style.display = "none";
+                }
+
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
@@ -157,6 +223,18 @@
             console.log("changing team");
             setTimeout(() => { location.href= "join.html"; }, 500);
         }, false);
+
+        // Event listener for making friend request
+        document.getElementById("add-friend-button").addEventListener("click", requestFriend, false);
+
+        // Event listeners for accepting friend request
+        // Event listener for team buttons
+        var requests = document.getElementsByClassName("friend-request");
+        console.log(requests);
+        for(var i = 0; i < requests.length; i++) {
+            console.log("cfreating friend request button");
+            new FriendRequestButton(i);
+        }
     }
 
     // Change user's display name
@@ -198,4 +276,61 @@
             document.getElementsByClassName("profile-picture")[0].appendChild(img);
          }, 500);
     });
+
+    // Make friend request
+    function requestFriend() {
+        var givenFriendName = prompt("Enter email of user to send friend request to: ", "");
+        if (givenFriendName != null && givenFriendName != "") {
+            // Send friend request
+            const user = firebase.auth().currentUser;
+            if (user) {
+                // Add requested friend to user's friendRequestsSent
+                var userRef = db.collection("users").doc(user.email);
+                userRef.set({
+                    friendRequestsSent: firebase.firestore.FieldValue.arrayUnion(givenFriendName)
+                }, { merge: true }).then(function() {
+                    console.log("Document successfully written!");
+                }).catch(function(error) {
+                    console.error("Error writing document: ", error);
+                });
+                // Add user to requested friend's friendRequestsReceived
+                var friendRef = db.collection("users").doc(givenFriendName);
+                friendRef.set({
+                    friendRequestsReceived: firebase.firestore.FieldValue.arrayUnion(user.email)
+                }, { merge: true }).then(function() {
+                    console.log("Document successfully written!");
+                }).catch(function(error) {
+                    console.error("Error writing document: ", error);
+                });
+            }
+        }
+    }
+
+    // Accept a pending friend request
+    function acceptFriend(friend) {
+        const user = firebase.auth().currentUser;
+        if (user) {
+            // Add accepted friend to user's friends
+            var userRef = db.collection("users").doc(user.email);
+            userRef.set({
+                friends: firebase.firestore.FieldValue.arrayUnion(friend),
+                friendRequestsReceieved: firebase.firestore.FieldValue.arrayRemove(friend)
+            }, { merge: true }).then(function() {
+                console.log("Document successfully written!");
+            }).catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+            // Add user to accepted friend's friends
+            var friendRef = db.collection("users").doc(friend);
+            friendRef.set({
+                friends: firebase.firestore.FieldValue.arrayUnion(user.email),
+                friendRequestsSent: firebase.firestore.FieldValue.arrayRemove(user.email)
+            }, { merge: true }).then(function() {
+                console.log("Document successfully written!");
+                window.alert("Friend added :)");
+            }).catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+        }
+    }
 </script>

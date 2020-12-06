@@ -70,6 +70,18 @@ class JoinTeamButton {
         addTeam(this.teamName);
     }
 }
+
+class FriendRequestButton {
+    constructor(index) {
+        this.index = index;
+        const btn = requests[index];
+        btn.addEventListener('click', this);
+        this.acceptedFriend = btn.innerHTML;
+    }
+    handleEvent(event) {
+        acceptFriend(this.acceptedFriend);
+    }
+}
                     
 // Get live game information from the NFL
 function getScore() {
