@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
     <head>
-        <title>HotTake - Game Information</title>
+        <title>HotTake - Your Team</title>
         <link href="styles.css" rel="stylesheet" type="text/css" media="all">
         <link href="app.css" rel="stylesheet" type="text/css" media="all">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -21,7 +20,7 @@
     <body>
         <div class="page-body" style="width: 100% !important;">
 
-            <div class="nav-bar" style="margin-top: 0; background-color: black;">
+            <div class="nav-bar" style="margin-top: 0;">
                 <a class="back-btn" href="home.html" style="margin-left: 24px;"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
                 <p class="nav-label"></p>
             </div>
@@ -45,12 +44,13 @@
                 </div>
             </div>
             
-            <div class="loader"></div>
+            <!-- <div class="loader"></div> -->
 
         </div>
 
-        <div class="page-body" id="gamepage-content" style="display: none;">
-            <br>
+        <div class="page-body" id="gamepage-content">
+			<br>
+			
             <div class="chat-list-item">
                 <img class="team-image" src="" alt="Team Image 1">
                 <div style="text-align: center; margin-left: 35px;">
@@ -59,15 +59,45 @@
                 </div>
                 <img class="team-image" src="" alt="Team Image 2" style="margin-left: auto;">
             </div>
-            <p class="subtitle" style="margin-bottom: 0px;">Storylines</p>
-            <p class="sub-line">See insights from around the league on the game</p>
-            <div class="storyline-list">
 
+            <div class="storyline-item">
+                <div class="topline">
+                    <span>Season Stats</span>
+                    <span class="topline_author">2020-2021</span>
+                </div>
+                <div>
+                    <div class="stat-item">
+                        <div class="stat-item-label">
+							<p>Record</p>
+                        </div>
+                        <div class="stat-item-stat">
+                            <p id="team-record"></p>
+						</div>
+					</div>
+					<div class="stat-item">
+                        <div class="stat-item-label">
+							<p>Playoff Seed</p>
+                        </div>
+                        <div class="stat-item-stat">
+                            <p id="team-playoff-seed"></p>
+						</div>
+					</div>
+					<div class="stat-item">
+                        <div class="stat-item-label">
+							<p>Average Points</p>
+                        </div>
+                        <div class="stat-item-stat">
+                            <p id="team-avgpointsfor"></p>
+						</div>
+					</div>
+                </div>
             </div>
+            
+            
 
         </div>
 
-        <script src="interactions.js"></script>
+        <!-- <script src="interactions.js"></script> -->
 
         <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
@@ -97,7 +127,7 @@
 <script>
     // Set db
     var db = firebase.firestore();
-
+    var currentUserTeam = "";
     var playerTeamAbbreviation = "";
     var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
                 , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
@@ -147,23 +177,23 @@
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        var email = user.email;
-        console.log(email);
-        db.collection("users").doc(email).get().then(function(doc) {
-            if (doc.exists) {
-                console.log(doc.data().team);
-                for (var i = 0; i < teams.length; i++) {
-                    if (teams[i] == doc.data().team) {
-                        playerTeamAbbreviation = teamsAbbreviated[i];
-                        getScore();
+        if (user) {
+            var email = user.email;
+            console.log(email);
+            db.collection("users").doc(email).get().then(function(doc) {
+                if (doc.exists) {
+                    currentUserTeam = doc.data().team;
+                    for (var i = 0; i < teams.length; i++) {
+                        if (teams[i] == currentUserTeam) {
+                            playerTeamAbbreviation = teamsAbbreviated[i];
+                            getScore();
+                        }
                     }
                 }
-            }
-        }).catch(function(error) {
-            console.error("Error getting user info: ", error);
-        });
-    } 
+            }).catch(function(error) {
+                console.error("Error getting user info: ", error);
+            });
+        } 
     });
 
     function getScore() {
@@ -188,8 +218,8 @@
 
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
-            console.log(result);
-            console.log(result.getAttribute("h"))
+            // console.log(result);
+            // console.log(result.getAttribute("h"))
             if (result.getAttribute("h") == playerTeamAbbreviation) {
                 console.log(result.getAttribute("hs"));
                 console.log(result.getAttribute("vs"));
@@ -198,7 +228,7 @@
                 document.getElementById("name-player-team").innerHTML = result.getAttribute("h")
                 document.getElementById("name-other-team").innerHTML = result.getAttribute("v")
                 // Set colors for home team
-                document.getElementsByClassName("left-team")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
+                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
                 document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
                 document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
                 // Set colors for away team
@@ -206,10 +236,7 @@
                 document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("nav-label")[0].innerHTML = 
-                result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
-                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1)
-                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+                document.getElementsByClassName("nav-label")[0].innerHTML = currentUserTeam;
                 // Styling for chat button
                 document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
@@ -226,18 +253,15 @@
                 document.getElementById("name-player-team").innerHTML = result.getAttribute("v");
                 document.getElementById("name-other-team").innerHTML = result.getAttribute("h");
                 // Set colors for home team
-                document.getElementsByClassName("left-team")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
+                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
                 document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
                 // Set colors for away team
                 document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
                 document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
                 document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
                 document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("nav-label")[0].innerHTML = 
-                result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
-                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1)
-                + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
+                document.getElementsByClassName("nav-label")[0].innerHTML = currentUserTeam;
+                document.getElementsByClassName("nav-label")[0].style.color = teamColors[result.getAttribute("v")][1];
                 // Styling for chat button
                 document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
@@ -320,9 +344,54 @@
             story_text.innerText = data.text;
             // console.log(data.text);
             story_item.append(story_text);
-            document.getElementsByClassName("storyline-list")[0].append(story_item);
+            // document.getElementsByClassName("storyline-list")[0].append(story_item);
         }
 
+        function getTeamData() {
+            $.ajax({
+                type: "GET",
+                url: "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/teams?region=us&lang=en&contentorigin=espn&limit=99",
+                success: function(allTeamResults) {
+                    console.log(allTeamResults);
+                    console.log("it works!");
+                    let teamsArray = allTeamResults.sports[0].leagues[0].teams;
+                    console.log(teamsArray);
+                    console.log(teamsArray.length);
+                    for (let i=0; i<teamsArray.length;i++) {
+                        // console.log(teamsArray[i].team.displayName);
+                        if (currentUserTeam == teamsArray[i].team.displayName) {
+                            console.log(teamsArray[i].team);
+                            let teamStats = teamsArray[i].team.record.items[0].stats;
+                            document.getElementById("team-record").innerText = teamsArray[i].team.record.items[0].summary;
+							document.getElementById("team-playoff-seed").innerText = teamStats[0].value;
+							// let truncateAvg = teamStats[11].value
+							document.getElementById("team-avgpointsfor").innerText = teamStats[11].value.toFixed(2);
+                            console.log(teamsArray[i].team.record.items[0].stats[0].value);
+                        }
+
+                    }
+
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+		getTeamData();
+		
+		function getTeamNews() {
+			$.ajax({
+				type: "GET",
+				url: ""
+			})
+		}
+
     }
+    
+    
+
 
 </script>
+
+<script src="teamstats.js"></script>
