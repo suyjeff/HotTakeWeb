@@ -4,4 +4,6 @@ function pageLoaded() {
     $(".tab-page").delay(1850).fadeIn(300);
     $(".scorecard").delay(1850).fadeIn(300);
     $("#gamepage-content").delay(1850).fadeIn(300);
+    $("#teampage-content").delay(1850).fadeIn(300);
+
 }

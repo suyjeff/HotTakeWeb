@@ -514,3 +514,68 @@ input[type="file"] {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+.espn-story {
+    margin-bottom: 16px;
+}
+
+.espn-image {
+    vertical-align: middle;    
+}
+
+.espn-text-div {
+    display: flex;
+    flex-direction: column;
+    background-color: #2b2b2b;
+    padding: 16px;
+}
+
+.espn-headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+}
+
+.espn-description {
+    color: #ccc;
+    margin-top: 8px;
+}
+
+.espn-read-link-div {
+    padding-top: 8px;
+}
+
+.espn-read-link {
+    font-family: Space Grotesk;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.view-hub-container {
+    text-align: center;
+}
+
+.view-hub-link {
+    display: flex;
+    vertical-align: center;
+    text-align: center;
+    background-color: #000;
+    margin: auto;
+    padding-left: 16px;
+}
+
+.view-hub-link p {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-family: Space Grotesk;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ccc;
+}
+
+.right-chevron {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}

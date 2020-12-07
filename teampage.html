@@ -14,7 +14,7 @@
         <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
         <link rel="manifest" href="assets/favicon/site.webmanifest">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <!-- Test Account to use: jeffsu@gmail.com, test123, Chiefs Fan -->
+        <!-- Test Account to use: jeffsu@gmail.com, test123, Seahawks Fan -->
     </head>
 
     <body>
@@ -25,7 +25,7 @@
                 <p class="nav-label"></p>
             </div>
                 
-            <div class="scorecard" style="display: none;">
+            <div class="scorecard-2" style="display: none;">
                 <div class="scorecard-game-info" style="border-radius: 0; margin-bottom: 0; display: flex; height: 40px;">
                     <div class="live-tag">
                         <p>LIVE</p>
@@ -44,13 +44,11 @@
                 </div>
             </div>
             
-            <!-- <div class="loader"></div> -->
+            <div class="loader"></div>
 
         </div>
 
-        <div class="page-body" id="gamepage-content">
-			<br>
-			
+        <div class="page-body" id="teampage-content" style="display: none;">			
             <div class="chat-list-item">
                 <img class="team-image" src="" alt="Team Image 1">
                 <div style="text-align: center; margin-left: 35px;">
@@ -91,13 +89,43 @@
 						</div>
 					</div>
                 </div>
-            </div>
-            
-            
+			</div>
+
+			<div class="storyline-item">
+				<div class="topline">
+					<span>Latest Game</span>
+					<span id="last-game-date"></span>
+				</div>
+				<div>
+					<div class="stat-item">
+						<div class="stat-item-label">
+							<p id="home-team-label"></p>
+						</div>
+						<div class="stat-item-stat">
+							<p id="home-team-score-teampage"></p>
+						</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-item-label">
+							<p id="away-team-label"></p>
+						</div>
+						<div class="stat-item-stat">
+							<p id="away-team-score-teampage"></p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p class="subtitle" style="margin-bottom: 0px;">Recent Articles</p>
+            <p class="sub-line">Read insights from NFL experts around the league.</p>
+			
+			<div class="espn-stories">
+				
+			</div>
 
         </div>
 
-        <!-- <script src="interactions.js"></script> -->
+        <script src="interactions.js"></script>
 
         <!-- The core Firebase JS SDK is always required and must be listed first -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
@@ -221,53 +249,48 @@
             // console.log(result);
             // console.log(result.getAttribute("h"))
             if (result.getAttribute("h") == playerTeamAbbreviation) {
-                console.log(result.getAttribute("hs"));
-                console.log(result.getAttribute("vs"));
-                document.getElementById("score-player-team").innerHTML = result.getAttribute("hs");
-                document.getElementById("score-other-team").innerHTML = result.getAttribute("vs");
-                document.getElementById("name-player-team").innerHTML = result.getAttribute("h")
-                document.getElementById("name-other-team").innerHTML = result.getAttribute("v")
+				document.getElementById("home-team-score-teampage").innerText = result.getAttribute("hs");
+				document.getElementById("away-team-score-teampage").innerText = result.getAttribute("vs");
+				document.getElementById("home-team-label").innerHTML = result.getAttribute("h");
+				document.getElementById("away-team-label").innerHTML = result.getAttribute("v");
+				
                 // Set colors for home team
                 document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
-                document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                // Set colors for away team
-                document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
-                document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
-                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("nav-label")[0].innerHTML = currentUserTeam;
+				document.getElementById("home-team-label").style.color = teamColors[playerTeamAbbreviation][1];
+				document.getElementById("home-team-score-teampage").style.color = teamColors[playerTeamAbbreviation][1];
+				document.getElementById("away-team-label").style.color = teamColors[result.getAttribute("v")][1];
+				document.getElementById("away-team-score-teampage").style.color = teamColors[result.getAttribute("v")][1];
+
+				document.getElementsByClassName("nav-label")[0].innerHTML = currentUserTeam;
+                document.getElementsByClassName("nav-label")[0].style.color = teamColors[result.getAttribute("h")][1];
+
                 // Styling for chat button
                 document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
                 document.getElementsByClassName("team-image")[1].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("v"))] + ".png";
-                var gameQuery = result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
-                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1);
                 homeTeam = result.getAttribute("h");
-                awayTeam = result.getAttribute("v");
+				awayTeam = result.getAttribute("v");
             } else if (result.getAttribute("v") == playerTeamAbbreviation) {
-                console.log(result.getAttribute("hs"));
-                console.log(result.getAttribute("vs"));
-                document.getElementById("score-player-team").innerHTML = result.getAttribute("vs");
-                document.getElementById("score-other-team").innerHTML = result.getAttribute("hs");
-                document.getElementById("name-player-team").innerHTML = result.getAttribute("v");
-                document.getElementById("name-other-team").innerHTML = result.getAttribute("h");
+                
+				document.getElementById("home-team-score-teampage").innerText = result.getAttribute("hs");
+				document.getElementById("away-team-score-teampage").innerText = result.getAttribute("vs");
+				document.getElementById("home-team-label").innerHTML = result.getAttribute("h");
+				document.getElementById("away-team-label").innerHTML = result.getAttribute("v");
+                
                 // Set colors for home team
-                document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
-                // Set colors for away team
-                document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[playerTeamAbbreviation][0];
-                document.getElementById("score-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                document.getElementById("name-player-team").style.color = teamColors[playerTeamAbbreviation][1];
-                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
+				document.getElementsByClassName("nav-bar")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
+				document.getElementById("home-team-label").style.color = teamColors[playerTeamAbbreviation][1];
+				document.getElementById("home-team-score-teampage").style.color = teamColors[playerTeamAbbreviation][1];
+				document.getElementById("away-team-label").style.color = teamColors[result.getAttribute("v")][1];
+				document.getElementById("away-team-score-teampage").style.color = teamColors[result.getAttribute("v")][1];
+                
                 document.getElementsByClassName("nav-label")[0].innerHTML = currentUserTeam;
-                document.getElementsByClassName("nav-label")[0].style.color = teamColors[result.getAttribute("v")][1];
+				document.getElementsByClassName("nav-label")[0].style.color = teamColors[result.getAttribute("v")][1];
+				
                 // Styling for chat button
                 document.getElementsByClassName("team-name")[0].innerHTML = result.getAttribute("h") + " at " + result.getAttribute("v");
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("h"))] + ".png";
                 document.getElementsByClassName("team-image")[1].src = "assets/team_images/" + teams[teamsAbbreviated.indexOf(result.getAttribute("v"))] + ".png";
-                var gameQuery = result.getAttribute("h").charAt(0).toUpperCase() + result.getAttribute("h").slice(1) + " at "
-                + result.getAttribute("v").charAt(0).toUpperCase() + result.getAttribute("v").slice(1);
                 homeTeam = result.getAttribute("h");
                 awayTeam = result.getAttribute("v");
             }
@@ -280,97 +303,28 @@
         }
 
         document.getElementsByClassName("chat-list-item")[0].addEventListener("click", function(event) {
-                    var teams = homeTeam + "_" + awayTeam;
-                    setTimeout(() => { location.href= "chatspage.html?Xteam=" + teams.replace(" ", "_"); }, 500);
-                }, false);
-
-        console.log(gameQuery);
-
-        TweetJs = {
-            ListTweetsOnUserTimeline : function(screenName, callback) {
-                TweetJs._callApi({
-                        Action: "ListTweetsOnUserTimeline",
-                        ScreenName: screenName
-                    },
-                callback);
-            },
-            Search: function (query, callback) {
-                TweetJs._callApi({
-                    Action: "Search",
-                    Query: query
-                }, callback);
-            },
-            _callApi: function (request, callback) {
-                var xhr = new XMLHttpRequest();
-                URL = "https://www.tweetjs.com/API.aspx"; 
-                xhr.open("POST", URL);
-                xhr.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        callback(JSON.parse(xhr.response));
-                    }
-                }
-                xhr.send(JSON.stringify(request));
-            }
-        };
-
-        TweetJs.Search(gameQuery,
-        function (data) {
-            console.log(data);
-            for (let i=0; i<data.statuses.length;i++) {
-                createStoryItem(data.statuses[i]);
-            }
-        });
-
-        function createStoryItem(data) {
-
-            // var tweetSubstring = data.text.substr(0, data.text.indexOf('https://tweetjs'));
-            // console.log(tweetSubstring);
-
-            var story_item = document.createElement("div");
-            story_item.setAttribute("class", "storyline-item");
-            story_item.setAttribute("id", data.id);
-            var topline = document.createElement("div");
-            topline.setAttribute("class", "topline");
-            var topline_label = document.createElement("span");
-            topline_label.innerText = "NFL";
-            topline.append(topline_label);
-            var topline_author = document.createElement("span");
-            topline_author.setAttribute("class", "topline-author");
-            topline_author.setAttribute("style", "margin-left: auto; font-weight: 400;");
-            topline_author.innerText = "@" + data.user.screen_name;
-            topline.append(topline_author);
-            story_item.append(topline);
-            var story_text = document.createElement("span");
-            story_text.innerText = data.text;
-            // console.log(data.text);
-            story_item.append(story_text);
-            // document.getElementsByClassName("storyline-list")[0].append(story_item);
-        }
+			var teams = homeTeam + "_" + awayTeam;
+			setTimeout(() => { location.href= "chatspage.html?Xteam=" + teams.replace(" ", "_"); }, 500);
+        }, false);
 
         function getTeamData() {
             $.ajax({
                 type: "GET",
                 url: "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/teams?region=us&lang=en&contentorigin=espn&limit=99",
                 success: function(allTeamResults) {
-                    console.log(allTeamResults);
-                    console.log("it works!");
+                    // console.log(allTeamResults);
                     let teamsArray = allTeamResults.sports[0].leagues[0].teams;
-                    console.log(teamsArray);
-                    console.log(teamsArray.length);
-                    for (let i=0; i<teamsArray.length;i++) {
-                        // console.log(teamsArray[i].team.displayName);
+                    // console.log(teamsArray);
+                    for (let i=0; i<teamsArray.length; i++) {
                         if (currentUserTeam == teamsArray[i].team.displayName) {
-                            console.log(teamsArray[i].team);
+                            // console.log(teamsArray[i].team);
                             let teamStats = teamsArray[i].team.record.items[0].stats;
                             document.getElementById("team-record").innerText = teamsArray[i].team.record.items[0].summary;
 							document.getElementById("team-playoff-seed").innerText = teamStats[0].value;
-							// let truncateAvg = teamStats[11].value
 							document.getElementById("team-avgpointsfor").innerText = teamStats[11].value.toFixed(2);
-                            console.log(teamsArray[i].team.record.items[0].stats[0].value);
+                            // console.log(teamsArray[i].team.record.items[0].stats[0].value);
                         }
-
                     }
-
                 },
                 error: function(error) {
                     console.log(error);
@@ -383,15 +337,54 @@
 		function getTeamNews() {
 			$.ajax({
 				type: "GET",
-				url: ""
-			})
+				url: "http://site.api.espn.com/apis/site/v2/sports/football/nfl/news?region=us&lang=en&contentorigin=espn&limit=99",
+				success: function(allNewsResults) {
+					let newsArrays = allNewsResults.articles;
+					for (let i=0; i<newsArrays.length; i++) {
+						for (let j=0; j<newsArrays[i].categories.length;j++) {
+							if (currentUserTeam == newsArrays[i].categories[j].description) {
+								console.log(newsArrays[i].headline);
+								var espn_story = document.createElement("div");
+								espn_story.setAttribute("class", "espn-story");
+								var espn_image = document.createElement("img");
+								espn_image.setAttribute("class", "espn-image");
+								espn_image.setAttribute("src", newsArrays[i].images[0].url);
+								espn_image.setAttribute("alt", "ESPN Article Image");
+								espn_image.setAttribute("style", "width: 326.25px;");
+								var espn_text_div = document.createElement("div");
+								espn_text_div.setAttribute("class", "espn-text-div");
+								var espn_headline = document.createElement("span");
+								espn_headline.setAttribute("class", "espn-headline");
+								espn_headline.innerText = newsArrays[i].headline;
+								espn_text_div.append(espn_headline);
+								var espn_description = document.createElement("span");
+								espn_description.setAttribute("class", "espn-description");
+								espn_description.innerText = newsArrays[i].description;
+								espn_text_div.append(espn_description);
+								var espn_read_link_div = document.createElement("div");
+								espn_read_link_div.setAttribute("class", "espn-read-link-div");
+								var espn_read_link = document.createElement("a");
+								espn_read_link.setAttribute("class", "espn-read-link");
+								espn_read_link.setAttribute("href", newsArrays[i].links.web.href);
+								espn_read_link.innerText = "Read Story";
+								espn_read_link.style.color = teamColors[playerTeamAbbreviation][1];
+								espn_read_link_div.append(espn_read_link);
+								espn_text_div.append(espn_read_link_div);
+								espn_story.append(espn_image);
+								espn_story.append(espn_text_div);
+								document.getElementsByClassName("espn-stories")[0].append(espn_story);											
+							}
+						}
+					}
+				},
+				error: function(error) {
+					console.log(error);
+				}
+			});
 		}
+
+		getTeamNews();
 
     }
     
-    
-
-
 </script>
-
-<script src="teamstats.js"></script>
