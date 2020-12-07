@@ -164,10 +164,11 @@
                 result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
                 + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");
-            }
-            if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
-                result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
-                document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+            
+                if (result.getAttribute("q") == "1" || result.getAttribute("q") == "2" ||
+                    result.getAttribute("q") == "3" || result.getAttribute("q") == "4") {
+                    document.getElementsByClassName("game-time")[0].innerHTML = result.getAttribute("k");
+                }
             }
         }
 

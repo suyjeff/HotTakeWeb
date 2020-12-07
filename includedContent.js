@@ -67,7 +67,7 @@ class JoinTeamButton {
         this.teamName = btn.firstChild.firstChild.innerHTML;
     }
     handleEvent(event) {
-        addTeam(this.teamName);
+        addTeam(this.teamName, this.index);
     }
 }
 
