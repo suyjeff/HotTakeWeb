@@ -25,7 +25,9 @@
             </div>
             <div class="tab-page" style="display: none;">
                 <p class="onboard-text">Find your favorite teams and join fellow fans!</p>
-                <div id="teams-div">
+                <div id="teams-div"></div>
+                <div id="continue_button_div">
+                    <button id="continue_button" style="background: darkgray;"> Select Teams</button>
                 </div>    
             </div>
         </div>    
@@ -57,6 +59,7 @@
 </html>
 
 <script>
+
     // Set db
     var db = firebase.firestore();
 
@@ -64,7 +67,7 @@
     for(var i = 0; i < teams.length; i++) {
         console.log(i);
         document.getElementById("teams-div").innerHTML += 
-        "<button class='team-button'>" +
+        "<button class='team-button' style='background-Color:white;'>" +
             "<div class='left'>" +
                 "<p class='team-text'>" + teams[i] + "</p>" +
                 "<p class='sport-text'>NFL</p>" +
@@ -80,9 +83,44 @@
     for(var i = 0; i < teamButtons.length; i++) {
         new JoinTeamButton(i);
     }
+    // Event listener for continue Button
+    document.getElementById("continue_button").addEventListener("click", finalizeTeams, false);
+    //array to store teams to be selected
+    var teamsArray = [];
+    function addTeam(teamName, teamButtonIndex) {
+        document.getElementById("continue_button").style.background = "white";
+        if (teamButtons[teamButtonIndex].style.backgroundColor == "white") {
+            teamButtons[teamButtonIndex].style.backgroundColor = "LightGray";
+            teamsArray.push(teamName);
+        }
+        else {
+            teamButtons[teamButtonIndex].style.backgroundColor = "white";
+            var spliceIndex=teamsArray.indexOf(teamName)
+            teamsArray.splice(spliceIndex,1);
+            if (teamsArray.length==0) {
+                document.getElementById("continue_button").style.background = "darkgray";
+            }
+        }
+    }
 
+    function finalizeTeams() {
+        var user = firebase.auth().currentUser;
+        if (user) {
+            db.collection("users").doc(user.email).set({
+                username:user.email,
+                teams:teamsArray
+            },{merge:true}).then(function() {
+                console.log("Document successfully written!");
+            }).catch(function(error) {
+                console.error("Error writing document: ", error);
+            });
+        }
+        // Redirect to onboardend
+        setTimeout(() => { location.href= "onboardend.html"; }, 500);
+    }
     // Add team to Cloud Firestore if user is signed in
-    function addTeam(team) {
+    /*
+    function addTeam_change(team) {
         var user = firebase.auth().currentUser;
         console.log(user.email);
         console.log(team);
@@ -99,7 +137,8 @@
         // Redirect to onboardend
         setTimeout(() => { location.href= "onboardend.html"; }, 500);
     }
-
+    */
+    
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -118,5 +157,7 @@
         // User is signed out.
         // ...
     }
+
     });
+    
 </script>
