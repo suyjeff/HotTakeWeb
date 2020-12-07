@@ -47,10 +47,22 @@
                 <!-- Add friends list here -->
                 <div class="chat-list-item">
                     <div id="friends-div"> 
-                        <!-- <p class="team-name">Test Friend</p> -->
                     </div>
                 </div>
                 <button class="settings-button" id="add-friend-button">Send Friend Request</button>
+                <p class="subtitle">Chats with Friends</p>
+                <!-- Add friends list here -->
+                <div class="chat-list-item">
+                    <div id="friends-chats-div">
+                    </div>
+                </div>
+                <button class="settings-button" id="add-friends-chat-button">Create a Chat with Friends</button>
+                <div id="create-friends-chat">
+                </div>
+                <div id="friends-chat-options" style="display: none">
+                    <form id="friends-chat-form">
+                    </form>
+                </div>
                 <div id="requests-sent">
                     <p class="subtitle">Friend Requests Sent</p>
                     <!-- Add list of sent friend requests here -->
@@ -93,12 +105,7 @@
             </div>
         </div>
         <!-- Breaks to make page scrollable and not hidden by navbar -->
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <br><br><br><br><br><br>
         <!-- Include outside scripts -->
         <script src="includedContent.js"></script>
         <script src="interactions.js"></script>
@@ -128,6 +135,7 @@
     // Set db
     var db = firebase.firestore();
     var storageRef;
+    var requests;
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
@@ -137,7 +145,6 @@
         console.log(user);
         db.collection("users").doc(email).get().then(function(doc) {
             if (doc.exists) {
-                console.log(doc.data().team);
                 document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
                 // for (var i = 0; i < teams.length; i++) {
@@ -159,7 +166,6 @@
                 img.setAttribute("height", 100);
                 document.getElementsByClassName("profile-picture")[0].appendChild(img);
                 // Display list of friends
-                console.log(doc.data().friends);
                 if (doc.data().friends != null) {
                     for (var i = 0; i < doc.data().friends.length; i++) {
                         var friendNode = document.createElement("p");
@@ -180,8 +186,6 @@
                     document.getElementById("requests-sent").style.display = "none";
                 }
                 // Display list of friend reqeuests received, display nothing if no friend requests have been received
-                console.log(doc.data().friendRequestsReceived);
-                console.log(doc.data());
                 if (doc.data().friendRequestsReceived != null) {
                     for (var i = 0; i < doc.data().friendRequestsReceived.length; i++) {
                         var friendRequestReceivedNode = document.createElement("p");
@@ -193,6 +197,12 @@
                     document.getElementById("requests-received").style.display = "none";
                 }
 
+            }
+        }).then(function() {
+            // Event listeners for accepting friend request
+            requests = document.getElementsByClassName("friend-request");
+            for(var i = 0; i < requests.length; i++) {
+                new FriendRequestButton(i);
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
@@ -226,15 +236,8 @@
 
         // Event listener for making friend request
         document.getElementById("add-friend-button").addEventListener("click", requestFriend, false);
-
-        // Event listeners for accepting friend request
-        // Event listener for team buttons
-        var requests = document.getElementsByClassName("friend-request");
-        console.log(requests);
-        for(var i = 0; i < requests.length; i++) {
-            console.log("cfreating friend request button");
-            new FriendRequestButton(i);
-        }
+        //Event listener for making friends chat
+        document.getElementById("add-friends-chat-button").addEventListener("click", makeFriendsChat, false);
     }
 
     // Change user's display name
@@ -314,7 +317,7 @@
             var userRef = db.collection("users").doc(user.email);
             userRef.set({
                 friends: firebase.firestore.FieldValue.arrayUnion(friend),
-                friendRequestsReceieved: firebase.firestore.FieldValue.arrayRemove(friend)
+                friendRequestsReceived: firebase.firestore.FieldValue.arrayRemove(friend)
             }, { merge: true }).then(function() {
                 console.log("Document successfully written!");
             }).catch(function(error) {
@@ -332,5 +335,30 @@
                 console.error("Error writing document: ", error);
             });
         }
+    }
+
+    // Make a new chat with friends
+    function makeFriendsChat() {
+        document.getElementById("friends-chat-options").style.display = "block";
+        var friends = document.getElementById("friends-div").children;
+        for (var i = 0; i < friends.length; i++) {
+            var friend = friends[i];
+            var friendInput = document.createElement("input");
+            friendInput.setAttribute("type", "checkbox");
+            friendInput.setAttribute("id", friend.innerHTML + i);
+            friendInput.setAttribute("name", friend.innerHTML + i);
+            friendInput.setAttribute("value", friend.innerHTML);
+            var friendLabel = document.createElement("label");
+            friendLabel.setAttribute("for", friend.innerHTML + i);
+            friendLabel.innerHTML = friend.innerHTML;
+            friendLabel.setAttribute("class", "team-name");
+            document.getElementById("create-friends-chat").appendChild(friendInput);
+            document.getElementById("create-friends-chat").appendChild(friendLabel);
+            document.getElementById("create-friends-chat").innerHTML += "<br>";
+        }
+        var submitButton = document.createElement("input");
+        submitButton.setAttribute("type", "submit");
+        submitButton.setAttribute("value", "Create Chat");
+        document.getElementById("create-friends-chat").appendChild(submitButton);
     }
 </script>
