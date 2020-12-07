@@ -19,7 +19,7 @@
 
     <body>
 
-        <div class="page-body">
+        <div class="page-body" style="margin-bottom: 100px">
             <p class="page-title-large">Your Profile</p>
             <!-- <button class="main-button" id="logout-button">Logout</button> -->
             <div class="tab-page" style="display: none;">
@@ -52,9 +52,7 @@
                 <button class="settings-button" id="add-friend-button">Send Friend Request</button>
                 <p class="subtitle">Chats with Friends</p>
                 <!-- Add friends list here -->
-                <div class="chat-list-item">
-                    <div id="friends-chats-div">
-                    </div>
+                <div id="friends-chats-div">
                 </div>
                 <button class="settings-button" id="add-friends-chat-button">Create a Chat with Friends</button>
                 <div id="create-friends-chat">
@@ -104,9 +102,6 @@
                 <img class="tab-bar-img" src="assets/icons/user_icon.svg" alt="User Icon">
             </div>
         </div>
-        <!-- Breaks to make page scrollable and not hidden by navbar -->
-        <!-- R u serious bro you added breaks... -->
-        <br><br><br><br><br><br>
         <!-- Include outside scripts -->
         <script src="includedContent.js"></script>
         <script src="interactions.js"></script>
@@ -159,6 +154,7 @@
                 if (user.displayName != null) {
                     document.getElementsByClassName("profile-username")[0].innerHTML = user.displayName;
                 }
+
                 // Display profile picture
                 var imageLocation = user.email.replace("@", "%40");
                 var img = document.createElement("img");
@@ -166,6 +162,7 @@
                 img.setAttribute("width", 100);
                 img.setAttribute("height", 100);
                 document.getElementsByClassName("profile-picture")[0].appendChild(img);
+
                 // Display list of friends
                 if (doc.data().friends != null) {
                     for (var i = 0; i < doc.data().friends.length; i++) {
@@ -175,6 +172,7 @@
                         document.getElementById("friends-div").appendChild(friendNode);
                     }
                 }
+
                 // Display list of friend requests sent, display nothing if no friend requests have been sent
                 if (doc.data().friendRequestsSent != null) {
                     for (var i = 0; i < doc.data().friendRequestsSent.length; i++) {
@@ -186,6 +184,7 @@
                 } else {
                     document.getElementById("requests-sent").style.display = "none";
                 }
+
                 // Display list of friend reqeuests received, display nothing if no friend requests have been received
                 if (doc.data().friendRequestsReceived != null) {
                     for (var i = 0; i < doc.data().friendRequestsReceived.length; i++) {
@@ -198,12 +197,33 @@
                     document.getElementById("requests-received").style.display = "none";
                 }
 
+                // Display list of chats with friends
+                if (doc.data().chatsWithFriends != null) {
+                    for (var i = 0; i < doc.data().chatsWithFriends.length; i++) {
+                        console.log(doc.data().chatsWithFriends[i]);
+                        var listItem = document.createElement("div");
+                        listItem.setAttribute("class", "chatListItem chat-with-friends-button");
+                        var innerDiv = document.createElement("div");
+                        var chatNameP = document.createElement("p");
+                        chatNameP.innerHTML = doc.data().chatsWithFriends[i];
+                        innerDiv.appendChild(chatNameP);
+                        listItem.appendChild(innerDiv);
+                        document.getElementById("friends-chats-div").appendChild(listItem);
+                    }
+                } else {
+                    document.getElemebtByID("friends-chats-div").style.display = "none";
+                }
             }
         }).then(function() {
             // Event listeners for accepting friend request
             requests = document.getElementsByClassName("friend-request");
-            for(var i = 0; i < requests.length; i++) {
+            for (var i = 0; i < requests.length; i++) {
                 new FriendRequestButton(i);
+            }
+            // Event listeners for joining chat with friends
+            chatsWithFriendsButtons = document.getElementsByClassName("chat-with-friends-button");
+            for (var i = 0; i < chatsWithFriendsButtons.length; i++) {
+                new ChatWithFriendsButton(i);
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
@@ -238,7 +258,12 @@
         // Event listener for making friend request
         document.getElementById("add-friend-button").addEventListener("click", requestFriend, false);
         //Event listener for making friends chat
-        document.getElementById("add-friends-chat-button").addEventListener("click", makeFriendsChat, false);
+        document.getElementById("add-friends-chat-button").addEventListener("click", showMakeFriendsChat, false);
+        
+        // Event listener for joining chat with friends
+        // document.getElementById("").addEventListener("click", function() {
+        //     setTimeout(() => { location.href= "chatspage.html?Xteam=" + friends.replace(" ", "_"); }, 500);
+        // }, false);
     }
 
     // Change user's display name
@@ -338,28 +363,77 @@
         }
     }
 
-    // Make a new chat with friends
-    function makeFriendsChat() {
-        document.getElementById("friends-chat-options").style.display = "block";
-        var friends = document.getElementById("friends-div").children;
-        for (var i = 0; i < friends.length; i++) {
-            var friend = friends[i];
-            var friendInput = document.createElement("input");
-            friendInput.setAttribute("type", "checkbox");
-            friendInput.setAttribute("id", friend.innerHTML + i);
-            friendInput.setAttribute("name", friend.innerHTML + i);
-            friendInput.setAttribute("value", friend.innerHTML);
-            var friendLabel = document.createElement("label");
-            friendLabel.setAttribute("for", friend.innerHTML + i);
-            friendLabel.innerHTML = friend.innerHTML;
-            friendLabel.setAttribute("class", "team-name");
-            document.getElementById("create-friends-chat").appendChild(friendInput);
-            document.getElementById("create-friends-chat").appendChild(friendLabel);
-            document.getElementById("create-friends-chat").innerHTML += "<br>";
+    // Show or hide options for making a chat with friends
+    function showMakeFriendsChat() {
+        if (document.getElementById("create-friends-chat").children.length == 0) {
+            // Show options for making a chat with friends if not currently visible
+            document.getElementById("friends-chat-options").style.display = "block";
+            var friends = document.getElementById("friends-div").children;
+            for (var i = 0; i < friends.length; i++) {
+                var friend = friends[i];
+                var friendInput = document.createElement("input");
+                friendInput.setAttribute("type", "checkbox");
+                friendInput.setAttribute("id", friend.innerHTML + i);
+                friendInput.setAttribute("name", friend.innerHTML + i);
+                friendInput.setAttribute("value", friend.innerHTML);
+                friendInput.setAttribute("class", "friend-checkbox");
+                var friendLabel = document.createElement("label");
+                friendLabel.setAttribute("for", friend.innerHTML + i);
+                friendLabel.innerHTML = friend.innerHTML;
+                friendLabel.setAttribute("class", "team-name");
+                document.getElementById("create-friends-chat").appendChild(friendInput);
+                document.getElementById("create-friends-chat").appendChild(friendLabel);
+                document.getElementById("create-friends-chat").innerHTML += "<br>";
+            }
+            var submitButton = document.createElement("input");
+            submitButton.setAttribute("type", "submit");
+            submitButton.setAttribute("value", "Create Chat");
+            submitButton.setAttribute("id", "create-friends-chat-button");
+            document.getElementById("create-friends-chat").appendChild(submitButton);
+            // Add event listener for submit button
+            document.getElementById("create-friends-chat-button").addEventListener("click", function() {
+                // Get all checked friends
+                var checkboxes = document.getElementsByClassName("friend-checkbox");
+                var checkedFriends = [];
+                for (var i = 0; i < checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        checkedFriends.push(checkboxes[i].value);
+                    }
+                }
+                const user = firebase.auth().currentUser;
+                var chatId = user.email + ",";
+                for (var i = 0; i < checkedFriends.length; i++) {
+                    chatId += checkedFriends[i];
+                    chatId += ",";
+                }
+                console.log(chatId);
+                // Add chat to database for all users in the chat
+                if (user) {
+                    // Add this chat to user's chatsWithFriends
+                    var userRef = db.collection("users").doc(user.email);
+                    userRef.set({
+                        chatsWithFriends: firebase.firestore.FieldValue.arrayUnion(chatId)
+                    }, { merge: true }).then(function() {
+                        console.log("Document successfully written!");
+                    }).catch(function(error) {
+                        console.error("Error writing document: ", error);
+                    });
+                    // Add this chat to all other users in the chat's chatsWithFriends 
+                    for (var i = 0; i < checkedFriends.length; i++) {
+                        var friendRef = db.collection("users").doc(checkedFriends[i]);
+                        friendRef.set({
+                            chatsWithFriends: firebase.firestore.FieldValue.arrayUnion(chatId)
+                        }, { merge: true }).then(function() {
+                            console.log("Document successfully written!");
+                        }).catch(function(error) {
+                            console.error("Error writing document: ", error);
+                        });
+                    }
+                }
+            }, false);
+        } else {
+            // Hide options for making a chat with friends if currently visible
+            document.getElementById("create-friends-chat").innerHTML = "";
         }
-        var submitButton = document.createElement("input");
-        submitButton.setAttribute("type", "submit");
-        submitButton.setAttribute("value", "Create Chat");
-        document.getElementById("create-friends-chat").appendChild(submitButton);
     }
 </script>

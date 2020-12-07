@@ -82,6 +82,18 @@ class FriendRequestButton {
         acceptFriend(this.acceptedFriend);
     }
 }
+
+class ChatWithFriendsButton {
+    constructor(index) {
+        this.index = index;
+        const btn = chatsWithFriendsButtons[index];
+        btn.addEventListener('click', this);
+        this.chatId = btn.firstChild.firstChild.innerHTML;
+    }
+    handleEvent(event) {
+        goToChat(this.chatId);
+    }
+}
                     
 // Get live game information from the NFL
 function getScore() {
@@ -104,6 +116,6 @@ function goToChat(team) {
     console.log(user.email);
     console.log(team);
     if (user) {
-        setTimeout(() => { location.href= "chatspage.html?team=" + team.replace(" ", "_"); }, 500);
+        setTimeout(() => { location.href= "chatspage.html?frie=" + team.replace(" ", "_"); }, 500);
     }
 }

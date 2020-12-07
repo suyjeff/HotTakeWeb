@@ -92,10 +92,15 @@
     var db = firebase.firestore();
     var chatTeam = "";
     var twoTeams = false;
+    var friendsChat = false;
     if(window.location.search.length > 0) {
         if (window.location.search.substring(0, 1) == "X") {
             twoTeams = true;
             chatTeam = window.location.search.substring(7).replace("_", " ").replace("%20", " ");
+        } else if (window.location.search.substring(1, 2) == "f") {
+            friendsChat = true;
+            chatTeam = window.location.search.substring(7).replace("_", " ").replace("%20", " ");
+            document.getElementsByClassName("chat-score-display")[0].style.display = "none";
         } else {
             chatTeam = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
         }
@@ -114,6 +119,7 @@
                     chatTeam = userTeam;
                 }
                 console.log(chatTeam);
+                console.log(friendsChat);
                 // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
                 // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
                 Talk.ready.then(async function() {
