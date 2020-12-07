@@ -20,12 +20,13 @@
 
     <body>
         <div class="page-body" style="width: 100% !important;">
-
+            <!-- Div for navbar -->
             <div class="nav-bar" style="margin-top: 0; background-color: black;">
                 <a class="back-btn" href="home.html" style="margin-left: 24px;"><img  src="assets/icons/left-arrow.png" alt="Left Arrow"></a>
                 <p class="nav-label"></p>
             </div>
                 
+            <!-- Div for game information -->
             <div class="scorecard" style="display: none;">
                 <div class="scorecard-game-info" style="border-radius: 0; margin-bottom: 0; display: flex; height: 40px;">
                     <div class="live-tag">
@@ -44,11 +45,10 @@
                     </div>
                 </div>
             </div>
-            
             <div class="loader"></div>
-
         </div>
 
+        <!-- Div for chat list -->
         <div class="page-body" id="gamepage-content" style="display: none;">
             <br>
             <div class="chat-list-item">
@@ -62,18 +62,14 @@
             <p class="subtitle" style="margin-bottom: 0px;">Storylines</p>
             <p class="sub-line">See insights from around the league on the game</p>
             <div class="storyline-list">
-
             </div>
-
         </div>
 
+        <!-- Include outside scripts -->
         <script src="interactions.js"></script>
-
-        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="includedContent.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-analytics.js"></script>
-        <!-- Add Firebase products that you want to use -->
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
@@ -97,53 +93,7 @@
 <script>
     // Set db
     var db = firebase.firestore();
-
     var playerTeamAbbreviation = "";
-    var teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
-                , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
-                "Carolina Panthers", "Chicago Bears", "Cincinnati Bengals", "Cleveland Browns",
-                "Dallas Cowboys", "Denver Broncos", "Detroit Lions", "Green Bay Packers",
-                "Houston Texans", "Indianapolis Colts", "Jacksonville Jaguars", "Kansas City Chiefs",
-                "Las Vegas Raiders", "Los Angeles Chargers", "Los Angeles Rams", "Miami Dolphins",
-                "New Orleans Saints", "Philadelphia Eagles", "Pittsburgh Steelers", "San Francisco 49ers",
-                "Seattle Seahawks", "Tampa Bay Buccaneers", "Tennessee Titans", "Washington"];
-    var teamsAbbreviated = ["MIN", "NYG", "NE", "NYJ", "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE", 
-                            "DAL", "DEN", "DET", "GB", "HOU", "IND", "JAX", "KC", "LV", "LAC", "LA", "MIA", "NO",
-                            "PHI", "PIT", "SF", "SEA", "TB", "TEN", "WAS"];
-    let teamColors = {
-        ARI: ["#97233F", "#FFB612"],
-        ATL: ["#A71930", "#000000"],
-        BAL: ["#241773", "#9E7C0C"],
-        BUF: ["#00338D", "#C60C30"],
-        CAR: ["#0085CA", "#101820"],
-        CHI: ["#0B162A", "#C83803"],
-        CIN: ["#FB4F14", "#000000"],
-        CLE: ["#311D00", "#FF3C00"],
-        DAL: ["#003594", "FFFFFF"],
-        DEN: ["#FB4F14", "#002244"],
-        DET: ["#0076B6", "#B0B7BC"],
-        GB: ["#203731", "#FFB612"],
-        HOU: ["#03202F", "#A71930"],
-        IND: ["#002C5F", "#A2AAAD"],
-        JAX: ["#006778", "#D7A22A"],
-        KC: ["#E31837", "#FFB81C"],
-        LAC: ["#FFC20E", "#0080C6"],
-        LA: ["#003594", "#FFA300"],
-        MIA: ["#008E97", "#FC4C02"],
-        MIN: ["#4F2683", "#FFC62F"],
-        NE: ["#002244", "#C60C30"],
-        NO: ["#D3BC8D", "#101820"],
-        NYG: ["#0B2265", "#A71930"],
-        NYJ: ["#125740", "#FFFFFF"],
-        LV: ["#000000", "#A5ACAF"],
-        PHI: ["#004C54", "#A5ACAF"],
-        PIT: ["#FFB612", "#101820"],
-        SF: ["#AA0000", "#B3995D"],
-        SEA: ["#002244", "#69BE28"],
-        TB: ["#D50A0A", "#0A0A08"],
-        TEN: ["#0C2340", "#4B92DB"],
-        WAS: ["#773141", "#FFB612"]
-    };
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
@@ -166,20 +116,8 @@
     } 
     });
 
-    function getScore() {
-        $.ajax({
-            type: "GET",
-            url: "https://static.nfl.com/liveupdate/scorestrip/ss.xml",
-            success: function(results) {
-                console.log("Success");
-                displayScore(results)
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    }
-
+    // Display live game information from NFL
+    // Display recent tweets about the game from TweetJS
     function displayScore(results) {
         resultsList = results.getElementsByTagName("g");
 
@@ -301,6 +239,8 @@
 
             // var tweetSubstring = data.text.substr(0, data.text.indexOf('https://tweetjs'));
             // console.log(tweetSubstring);
+            var tweetSubstring = data.text.substr(0, data.text.indexOf('https://tweetjs'));
+            console.log(tweetSubstring);
 
             var story_item = document.createElement("div");
             story_item.setAttribute("class", "storyline-item");
@@ -322,7 +262,5 @@
             story_item.append(story_text);
             document.getElementsByClassName("storyline-list")[0].append(story_item);
         }
-
     }
-
 </script>
