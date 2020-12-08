@@ -304,7 +304,7 @@
 
         document.getElementsByClassName("chat-list-item")[0].addEventListener("click", function(event) {
 			var teams = homeTeam + "_" + awayTeam;
-			setTimeout(() => { location.href= "chatspage.html?Xteam=" + teams.replace(" ", "_"); }, 500);
+			setTimeout(() => { location.href= "chatspage.html" }, 500);
         }, false);
 
         function getTeamData() {
