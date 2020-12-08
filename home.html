@@ -136,7 +136,7 @@
                 document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams[0] + ".png";
                 for (var i = 0; i<teamsArray.length; i++) {
                     addScorecard(i);                    
-                    for (var j = 0; j < teamsArray.length; j++) {
+                    for (var j = 0; j < teams.length; j++) {
                         if (teams[j] == doc.data().teams[i]) {
                             playerTeamAbbreviation.push(teamsAbbreviated[j]);
                             getScore(i);
