@@ -24,36 +24,10 @@
         <div class="page-body">
             <p class="page-title-large">What's Hot</p>
             <div class="tab-page" style="display: none;">
+                <div id = "scorecard"></div>
                 <p class="subtitle" style="margin-bottom: 0;">Scores</p>
                 <p class="sub-line">View the latest scores of your favorite teams, tap on the game score to read more and join the game chat.</p>
-                <div class="scorecard">
-                    <div class="game-date-time-container">
-                        <p class="game-date-time"></p>
-                    </div>
-                    <div class="scorecard-game-info">
-                        <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
-                    </div>
-                    <a href="gamepage.html" style="text-decoration: inherit;">
-                        <div class="scorecard-teams-container">
-                            <div class="scorecard-team-card left-team">
-                                <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team"></span><span class="scorecard-team-record"></span></p>
-                                <p class="scorecard-score" id="score-player-team">-</p>
-                            </div>
-                            <div class="scorecard-team-card right-team">
-                                <p style="margin: 4px;"><span class="scorecard-team" id="name-other-team"></span><span class="scorecard-team-record"></span></p>
-                                <p class="scorecard-score" id="score-other-team">-</p>
-                            </div>
-                        </div>
-                        <div class="view-hub-container">
-                            <div class="view-hub-link">
-                                <p>Game Hub</p>
-                                <svg class="right-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z" fill="#4A5568"/>
-                                </svg>
-                            </div> 
-                        </div>
-                    </a>
-                </div>
+                
                 <p class="subtitle">Your Chats</p>
                 <div class="chat-list-item" onclick="location.href='chatspage.html';">
                     <img class="team-image" src="" alt="Team Image">
@@ -109,11 +83,46 @@
 </html>
 
 <script>
+
+    //create div for team scores
+    function addScorecard(index) {
+        document.getElementById("scorecard").innerHTML +=
+     `<div class="scorecard">
+            <div class='game-date-time-container'>
+                        <p class="game-date-time" id= "game-date-time` + index + `"></p>
+                    </div>
+                    <div class="scorecard-game-info">
+                        <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
+                    </div>
+                    <a href="gamepage.html" style="text-decoration: inherit;">
+                        <div class="scorecard-teams-container">
+                            <div class="scorecard-team-card left-team">
+                                <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team` + index + `"></span><span class="scorecard-team-record"></span></p>
+                                <p class="scorecard-score" id="score-player-team` + index + `">-</p>
+                            </div>
+                            <div class="scorecard-team-card right-team">
+                                <p style="margin: 4px;"><span class="scorecard-team" id="name-other-team` + index + `"></span><span class="scorecard-team-record"></span></p>
+                                <p class="scorecard-score" id="score-other-team` + index + `">-</p>
+                            </div>
+                        </div>
+                        <div class="view-hub-container">
+                            <div class="view-hub-link">
+                                <p>Game Hub</p>
+                                <svg class="right-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z" fill="#4A5568"/>
+                                </svg>
+                            </div> 
+                        </div>
+                    </a>
+                </div>"`;
+    }
+    
+
     // Set db
     var db = firebase.firestore();
     var latestQuery = "";
-    var playerTeamAbbreviation = "";
-
+    var playerTeamAbbreviation = [];
+    
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -121,16 +130,29 @@
         console.log(email);
         db.collection("users").doc(email).get().then(function(doc) {
             if (doc.exists) {
-                console.log(doc.data().team);
-                latestQuery = doc.data().team;
-                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
-                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
-                for (var i = 0; i < teams.length; i++) {
+                console.log(doc.data().teams);
+                var teamsArray = doc.data().teams;
+                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().teams[0];
+                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams[0] + ".png";
+                for (var i = 0; i<teamsArray.length; i++) {
+                    addScorecard(i);                    
+                    for (var j = 0; j < teamsArray.length; j++) {
+                        if (teams[j] == doc.data().teams[i]) {
+                            playerTeamAbbreviation.push(teamsAbbreviated[j]);
+                            getScore(i);
+                        }
+                    }
+                }
+
+                //latestQuery = doc.data().teams;
+                //document.getElementsByClassName("team-name")[0].innerHTML = doc.data().teams;
+                //document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams + ".png";
+                /*for (var i = 0; i < teams.length; i++) {
                     if (teams[i] == doc.data().team) {
                         playerTeamAbbreviation = teamsAbbreviated[i];
                         getScore();
                     }
-                }
+                }*/
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
@@ -140,27 +162,27 @@
 
     // Display live game information from NFL
     // Display recent tweets about the game from TweetJS
-    function displayScore(results) {
+    function displayScore(results, index) {
         resultsList = results.getElementsByTagName("g");
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
-            if (result.getAttribute("h") == playerTeamAbbreviation || result.getAttribute("v") == playerTeamAbbreviation) {
+            if (result.getAttribute("h") == playerTeamAbbreviation[index] || result.getAttribute("v") == playerTeamAbbreviation[index]) {
                 console.log(result.getAttribute("hs"));
                 console.log(result.getAttribute("vs"));
-                document.getElementById("score-player-team").innerHTML = result.getAttribute("vs");
-                document.getElementById("score-other-team").innerHTML = result.getAttribute("hs");
-                document.getElementById("name-player-team").innerHTML = result.getAttribute("v");
-                document.getElementById("name-other-team").innerHTML = result.getAttribute("h");
+                document.getElementById("score-player-team" + index).innerHTML = result.getAttribute("vs");
+                document.getElementById("score-other-team" + index).innerHTML = result.getAttribute("hs");
+                document.getElementById("name-player-team" + index).innerHTML = result.getAttribute("v");
+                document.getElementById("name-other-team" + index).innerHTML = result.getAttribute("h");
                 // Set colors for home team
-                document.getElementsByClassName("left-team")[0].style.backgroundColor = teamColors[result.getAttribute("v")][0];
-                document.getElementById("score-player-team").style.color = teamColors[result.getAttribute("v")][1];
-                document.getElementById("name-player-team").style.color = teamColors[result.getAttribute("v")][1];
+                document.getElementsByClassName("left-team")[index].style.backgroundColor = teamColors[result.getAttribute("v")][0];
+                document.getElementById("score-player-team" + index).style.color = teamColors[result.getAttribute("v")][1];
+                document.getElementById("name-player-team" + index).style.color = teamColors[result.getAttribute("v")][1];
                 // Set colors for away team
-                document.getElementsByClassName("right-team")[0].style.backgroundColor = teamColors[result.getAttribute("h")][0];
-                document.getElementById("score-other-team").style.color = teamColors[result.getAttribute("h")][1];
-                document.getElementById("name-other-team").style.color = teamColors[result.getAttribute("h")][1];
-                document.getElementsByClassName("quarter")[0].innerHTML = result.getAttribute("q");
-                document.getElementsByClassName("game-date-time")[0].innerHTML = 
+                document.getElementsByClassName("right-team")[index].style.backgroundColor = teamColors[result.getAttribute("h")][0];
+                document.getElementById("score-other-team" + index).style.color = teamColors[result.getAttribute("h")][1];
+                document.getElementById("name-other-team" + index).style.color = teamColors[result.getAttribute("h")][1];
+                document.getElementsByClassName("quarter")[index].innerHTML = result.getAttribute("q");
+                document.getElementById("game-date-time" + index).innerHTML = 
                 result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
                 + result.getAttribute("vnn").charAt(0).toUpperCase() + result.getAttribute("vnn").slice(1)
                 + " - " + result.getAttribute("d") + ", " + result.getAttribute("t");

@@ -96,13 +96,13 @@ class ChatWithFriendsButton {
 }
                     
 // Get live game information from the NFL
-function getScore() {
+function getScore(i) {
     $.ajax({
         type: "GET",
         url: "https://static.nfl.com/liveupdate/scorestrip/ss.xml",
         success: function(results) {
             console.log("Success");
-            displayScore(results)
+            displayScore(results, i)
         },
         error: function(error) {
             console.log(error);
