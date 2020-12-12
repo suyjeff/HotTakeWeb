@@ -99,8 +99,8 @@
             chatTeam = window.location.search.substring(7).replace("_", " ").replace("%20", " ");
         } else if (window.location.search.substring(1, 2) == "f") {
             friendsChat = true;
-            chatTeam = window.location.search.substring(7).replace("_", " ").replace("%20", " ");
-            document.getElementsByClassName("chat-score-display")[0].style.display = "none";
+            chatTeam = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
+            // document.getElementsByClassName("chat-score-display")[0].style.display = "none";
         } else {
             chatTeam = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
         }

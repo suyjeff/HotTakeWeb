@@ -24,17 +24,18 @@
         <div class="page-body">
             <p class="page-title-large">What's Hot</p>
             <div class="tab-page" style="display: none;">
-                <div id = "scorecard"></div>
                 <p class="subtitle" style="margin-bottom: 0;">Scores</p>
                 <p class="sub-line">View the latest scores of your favorite teams, tap on the game score to read more and join the game chat.</p>
-                
+                <div id = "scorecard"></div>
                 <p class="subtitle">Your Chats</p>
-                <div class="chat-list-item" onclick="location.href='chatspage.html';">
-                    <img class="team-image" src="" alt="Team Image">
-                    <div>
-                        <p class="team-name">Team Name</p>
-                        <p class="members">Fan Hub</p>
-                    </div>
+                <div id="chat-list">
+                    <!-- <div class="chat-list-item" onclick="location.href='chatspage.html';">
+                        <img class="team-image" src="" alt="Team Image">
+                        <div>
+                            <p class="team-name">Team Name</p>
+                            <p class="members">Fan Hub</p>
+                        </div>
+                    </div>     -->
                 </div>
                 <p class="subtitle" style="margin-bottom: 0;">The Latest</p>
                 <p class="sub-line" style="margin-bottom: 20px;">Read the latest from around the league on your team</p>
@@ -87,36 +88,48 @@
     //create div for team scores
     function addScorecard(index) {
         document.getElementById("scorecard").innerHTML +=
-     `<div class="scorecard">
+        `<div class="scorecard">
             <div class='game-date-time-container'>
-                        <p class="game-date-time" id= "game-date-time` + index + `"></p>
+                <p class="game-date-time" id= "game-date-time` + index + `"></p>
+            </div>
+            <div class="scorecard-game-info">
+                <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
+            </div>
+            <a href="gamepage.html" style="text-decoration: inherit;">
+                <div class="scorecard-teams-container">
+                    <div class="scorecard-team-card left-team">
+                        <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team` + index + `"></span><span class="scorecard-team-record"></span></p>
+                        <p class="scorecard-score" id="score-player-team` + index + `">-</p>
                     </div>
-                    <div class="scorecard-game-info">
-                        <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
+                    <div class="scorecard-team-card right-team">
+                        <p style="margin: 4px;"><span class="scorecard-team" id="name-other-team` + index + `"></span><span class="scorecard-team-record"></span></p>
+                        <p class="scorecard-score" id="score-other-team` + index + `">-</p>
                     </div>
-                    <a href="gamepage.html" style="text-decoration: inherit;">
-                        <div class="scorecard-teams-container">
-                            <div class="scorecard-team-card left-team">
-                                <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team` + index + `"></span><span class="scorecard-team-record"></span></p>
-                                <p class="scorecard-score" id="score-player-team` + index + `">-</p>
-                            </div>
-                            <div class="scorecard-team-card right-team">
-                                <p style="margin: 4px;"><span class="scorecard-team" id="name-other-team` + index + `"></span><span class="scorecard-team-record"></span></p>
-                                <p class="scorecard-score" id="score-other-team` + index + `">-</p>
-                            </div>
-                        </div>
-                        <div class="view-hub-container">
-                            <div class="view-hub-link">
-                                <p>Game Hub</p>
-                                <svg class="right-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z" fill="#4A5568"/>
-                                </svg>
-                            </div> 
-                        </div>
-                    </a>
-                </div>"`;
+                </div>
+                <div class="view-hub-container">
+                    <div class="view-hub-link">
+                        <p>Game Hub</p>
+                        <svg class="right-chevron" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.29289 14.7071C6.90237 14.3166 6.90237 13.6834 7.29289 13.2929L10.5858 10L7.29289 6.70711C6.90237 6.31658 6.90237 5.68342 7.29289 5.29289C7.68342 4.90237 8.31658 4.90237 8.70711 5.29289L12.7071 9.29289C13.0976 9.68342 13.0976 10.3166 12.7071 10.7071L8.70711 14.7071C8.31658 15.0976 7.68342 15.0976 7.29289 14.7071Z" fill="#4A5568"/>
+                        </svg>
+                    </div> 
+                </div>
+            </a>
+        </div>`;
     }
     
+    function addChatButton(index) {
+        document.getElementById("chat-list").innerHTML +=
+        `
+        <div class="chat-list-item">
+            <img class="team-image" src="" alt="Team Image">
+            <div>
+                <p class="team-name">Team Name</p>
+                <p class="members">Fan Hub</p>
+            </div>
+        </div>
+        `
+    }
 
     // Set db
     var db = firebase.firestore();
@@ -132,10 +145,15 @@
             if (doc.exists) {
                 console.log(doc.data().teams);
                 var teamsArray = doc.data().teams;
-                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().teams[0];
-                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams[0] + ".png";
+                // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().teams[0];
+                // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams[0] + ".png";
+                // Loop through all of user's teams and show scorecards and chat buttons
                 for (var i = 0; i<teamsArray.length; i++) {
-                    addScorecard(i);                    
+                    addChatButton(i);
+                    addScorecard(i);           
+                    // Populate chat buttons
+                    document.getElementsByClassName("team-name")[i].innerHTML = doc.data().teams[i];
+                    document.getElementsByClassName("team-image")[i].src = "assets/team_images/" + doc.data().teams[i] + ".png";          
                     for (var j = 0; j < teams.length; j++) {
                         if (teams[j] == doc.data().teams[i]) {
                             playerTeamAbbreviation.push(teamsAbbreviated[j]);
@@ -143,16 +161,13 @@
                         }
                     }
                 }
-
-                //latestQuery = doc.data().teams;
-                //document.getElementsByClassName("team-name")[0].innerHTML = doc.data().teams;
-                //document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams + ".png";
-                /*for (var i = 0; i < teams.length; i++) {
-                    if (teams[i] == doc.data().team) {
-                        playerTeamAbbreviation = teamsAbbreviated[i];
-                        getScore();
-                    }
-                }*/
+                var teamButtons = document.getElementsByClassName("chat-list-item");
+                console.log(teamButtons);
+                // Event listener for team buttons
+                for(var i = 0; i < teamButtons.length; i++) {
+                    console.log(teamButtons[i]);
+                    new ChatTeamButton(i, teamButtons);
+                }
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
@@ -169,18 +184,20 @@
             if (result.getAttribute("h") == playerTeamAbbreviation[index] || result.getAttribute("v") == playerTeamAbbreviation[index]) {
                 console.log(result.getAttribute("hs"));
                 console.log(result.getAttribute("vs"));
+                // Set scores
                 document.getElementById("score-player-team" + index).innerHTML = result.getAttribute("vs");
                 document.getElementById("score-other-team" + index).innerHTML = result.getAttribute("hs");
                 document.getElementById("name-player-team" + index).innerHTML = result.getAttribute("v");
                 document.getElementById("name-other-team" + index).innerHTML = result.getAttribute("h");
-                // Set colors for home team
+                // Set colors for player team
                 document.getElementsByClassName("left-team")[index].style.backgroundColor = teamColors[result.getAttribute("v")][0];
                 document.getElementById("score-player-team" + index).style.color = teamColors[result.getAttribute("v")][1];
                 document.getElementById("name-player-team" + index).style.color = teamColors[result.getAttribute("v")][1];
-                // Set colors for away team
+                // Set colors for other team
                 document.getElementsByClassName("right-team")[index].style.backgroundColor = teamColors[result.getAttribute("h")][0];
                 document.getElementById("score-other-team" + index).style.color = teamColors[result.getAttribute("h")][1];
                 document.getElementById("name-other-team" + index).style.color = teamColors[result.getAttribute("h")][1];
+                // Set additional game info
                 document.getElementsByClassName("quarter")[index].innerHTML = result.getAttribute("q");
                 document.getElementById("game-date-time" + index).innerHTML = 
                 result.getAttribute("hnn").charAt(0).toUpperCase() + result.getAttribute("hnn").slice(1) + " at "
@@ -196,64 +213,5 @@
 
         console.log(latestQuery);
 
-        TweetJs = {
-            ListTweetsOnUserTimeline : function(screenName, callback) {
-                TweetJs._callApi({
-                        Action: "ListTweetsOnUserTimeline",
-                        ScreenName: screenName
-                    },
-                callback);
-            },
-            Search: function (query, callback) {
-                TweetJs._callApi({
-                    Action: "Search",
-                    Query: query
-                }, callback);
-            },
-            _callApi: function (request, callback) {
-                var xhr = new XMLHttpRequest();
-                URL = "https://www.tweetjs.com/API.aspx"; 
-                xhr.open("POST", URL);
-                xhr.onreadystatechange = function () {
-                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                        callback(JSON.parse(xhr.response));
-                    }
-                }
-                xhr.send(JSON.stringify(request));
-            }
-        };
-
-        TweetJs.Search(latestQuery,
-        function (data) {
-            console.log(data);
-            for (let i=0; i<5;i++) {
-                createStoryItem(data.statuses[i]);
-            }
-        });
-
-        function createStoryItem(data) {
-            var tweetSubstring = data.text.substr(0, data.text.indexOf('https://tweetjs'));
-            console.log(tweetSubstring);
-
-            var story_item = document.createElement("div");
-            story_item.setAttribute("class", "storyline-item");
-            story_item.setAttribute("id", data.id);
-            var topline = document.createElement("div");
-            topline.setAttribute("class", "topline");
-            var topline_label = document.createElement("span");
-            topline_label.innerText = playerTeamAbbreviation;
-            topline.append(topline_label);
-            var topline_author = document.createElement("span");
-            topline_author.setAttribute("class", "topline-author");
-            topline_author.setAttribute("style", "margin-left: auto; font-weight: 400;");
-            topline_author.innerText = "@" + data.user.screen_name;
-            topline.append(topline_author);
-            story_item.append(topline);
-            var story_text = document.createElement("span");
-            story_text.innerText = tweetSubstring;
-            // console.log(data.text);
-            story_item.append(story_text);
-            document.getElementsByClassName("storyline-list")[0].append(story_item);
-        }
     }
 </script>

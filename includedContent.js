@@ -48,14 +48,20 @@ var teamsAbbreviated = ["MIN", "NYG", "NE", "NYJ", "ARI", "ATL", "BAL", "BUF", "
                         "PHI", "PIT", "SF", "SEA", "TB", "TEN", "WAS"];
 
 class ChatTeamButton {
-    constructor(index) {
+    constructor(index, teamButtons) {
         this.index = index;
+        this.teamButtons = teamButtons;
         const btn = teamButtons[index];
         btn.addEventListener('click', this);
-        this.teamName = btn.firstChild.firstChild.innerHTML;
+        if (btn.firstChild.className == "left") {
+            this.teamName = btn.firstChild.firstChild.innerHTML;
+        } else {
+            this.teamName = btn.childNodes[3].getElementsByTagName('p')[0].innerHTML;
+        }
+        console.log(this.teamName);
     }
     handleEvent(event) {
-        goToChat(this.teamName);
+        goToChat(this.teamName, false);
     }
 }
 
@@ -91,7 +97,7 @@ class ChatWithFriendsButton {
         this.chatId = btn.firstChild.firstChild.innerHTML;
     }
     handleEvent(event) {
-        goToChat(this.chatId);
+        goToChat(this.chatId, true);
     }
 }
                     
@@ -111,11 +117,15 @@ function getScore(i) {
 }
 
 // Go to chat if user is signed in
-function goToChat(team) {
+function goToChat(team, isFriendsChat) {
     var user = firebase.auth().currentUser;
     console.log(user.email);
     console.log(team);
     if (user) {
-        setTimeout(() => { location.href= "chatspage.html?frie=" + team.replace(" ", "_"); }, 500);
+        if (isFriendsChat) {
+            setTimeout(() => { location.href= "chatspage.html?frie=" + team.replace(" ", "_"); }, 500);
+        } else {
+            setTimeout(() => { location.href= "chatspage.html?team=" + team.replace(" ", "_"); }, 500);
+        }
     }
 }
