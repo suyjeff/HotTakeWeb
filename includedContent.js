@@ -56,17 +56,19 @@ class ChatTeamButton {
     constructor(index, teamButtons) {
         this.index = index;
         this.teamButtons = teamButtons;
+        this.goToTeamPage = false;
         const btn = teamButtons[index];
         btn.addEventListener('click', this);
         if (btn.firstChild.className == "left") {
             this.teamName = btn.firstChild.firstChild.innerHTML;
         } else {
-            this.teamName = btn.childNodes[3].getElementsByTagName('p')[0].innerHTML;    
+            this.teamName = btn.childNodes[3].getElementsByTagName('p')[0].innerHTML;  
+            this.goToTeamPage = true;
         }
         console.log(this.teamName);
     }
     handleEvent(event) {
-        goToChat(this.teamName, false);
+        goToChat(this.teamName, false, this.goToTeamPage);
     }
 }
 
@@ -112,9 +114,7 @@ class GameHubButton {
         this.gameHubButtons = gameHubButtons;
         const btn = gameHubButtons[index];
         btn.addEventListener('click', this);
-        console.log(btn);
         this.gameId = btn.childNodes[1].childNodes[1].childNodes[1].firstChild.innerHTML;
-        console.log(this.gameId);
     }
     handleEvent(event) {
         goToGamePage(this.gameId);
@@ -140,12 +140,12 @@ function getScore(i) {
 }
 
 // Go to chat if user is signed in
-function goToChat(team, isFriendsChat) {
+function goToChat(team, isFriendsChat, goToTeamPage) {
     var user = firebase.auth().currentUser;
-    console.log(user.email);
-    console.log(team);
     if (user) {
-        if (isFriendsChat) {
+        if (goToTeamPage) {
+            setTimeout(() => { location.href= "teampage.html?team=" + team.replace(" ", "_"); }, 500);
+        } else if (isFriendsChat) {
             setTimeout(() => { location.href= "chatspage.html?frie=" + team.replace(" ", "_"); }, 500);
         } else {
             setTimeout(() => { location.href= "chatspage.html?team=" + team.replace(" ", "_"); }, 500);
@@ -156,8 +156,6 @@ function goToChat(team, isFriendsChat) {
 // Go to chat if user is signed in
 function goToGamePage(gameId) {
     var user = firebase.auth().currentUser;
-    console.log(user.email);
-    console.log(gameId);
     if (user) {
         setTimeout(() => { location.href= "gamepage.html?game=" + gameId.replace(" ", "_"); }, 500);
     }
