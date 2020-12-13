@@ -61,7 +61,7 @@ class ChatTeamButton {
         if (btn.firstChild.className == "left") {
             this.teamName = btn.firstChild.firstChild.innerHTML;
         } else {
-            this.teamName = btn.childNodes[3].getElementsByTagName('p')[0].innerHTML;
+            this.teamName = btn.childNodes[3].getElementsByTagName('p')[0].innerHTML;    
         }
         console.log(this.teamName);
     }
@@ -128,7 +128,10 @@ function getScore(i) {
         url: "https://static.nfl.com/liveupdate/scorestrip/ss.xml",
         success: function(results) {
             console.log("Success");
-            displayScore(results, i)
+            console.log(typeof displayScore);
+            if (typeof displayScore == "function") {
+                displayScore(results, i);
+            }
         },
         error: function(error) {
             console.log(error);

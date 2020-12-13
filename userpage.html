@@ -161,7 +161,7 @@
                         }
                     }
                 }
-                var teamButtons = document.getElementsByClassName("chat-list-item");
+                var teamButtons = document.getElementsByClassName("chat-list-real");
                 console.log(teamButtons);
                 // Event listener for team buttons
                 for(var i = 0; i < teamButtons.length; i++) {
@@ -230,7 +230,7 @@
                         document.getElementById("friends-chats-div").appendChild(listItem);
                     }
                 } else {
-                    document.getElemebtByID("friends-chats-div").style.display = "none";
+                    document.getElementById("friends-chats-div").style.display = "none";
                 }
             }
         }).then(function() {
@@ -459,7 +459,7 @@
     function addChatButton(index) {
         document.getElementById("chat-list").innerHTML +=
         `
-        <div class="chat-list-item">
+        <div class="chat-list-item chat-list-real">
             <img class="team-image" src="" alt="Team Image">
             <div>
                 <p class="team-name">Team Name</p>
