@@ -95,7 +95,7 @@
             <div class="scorecard-game-info">
                 <p style="margin: 0;"><span class="game-time"></span><span class="quarter"></span></p>
             </div>
-            <a href="gamepage.html" style="text-decoration: inherit;">
+            <a class="game-hub-button" style="text-decoration: inherit;">
                 <div class="scorecard-teams-container">
                     <div class="scorecard-team-card left-team">
                         <p style="margin: 4px;"><span class="scorecard-team" id="name-player-team` + index + `"></span><span class="scorecard-team-record"></span></p>
@@ -161,9 +161,9 @@
                         }
                     }
                 }
+                // Event listeners for team buttons
                 var teamButtons = document.getElementsByClassName("chat-list-item");
                 console.log(teamButtons);
-                // Event listener for team buttons
                 for(var i = 0; i < teamButtons.length; i++) {
                     console.log(teamButtons[i]);
                     new ChatTeamButton(i, teamButtons);
@@ -210,7 +210,13 @@
                 }
             }
         }
-
+        // Event listeners for game hub buttons
+        var gameHubButtons = document.getElementsByClassName("game-hub-button");
+        console.log(gameHubButtons);
+        for(var i = 0; i < gameHubButtons.length; i++) {
+            console.log(gameHubButtons[i]);
+            new GameHubButton(i, gameHubButtons);
+        }
         console.log(latestQuery);
 
     }

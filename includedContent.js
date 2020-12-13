@@ -1,3 +1,8 @@
+var script = document.createElement('script');
+script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
+script.type = 'text/javascript';
+document.getElementsByTagName('head')[0].appendChild(script);
+
 // Make buttons for each team's chat
 let teams = ["Minnesota Vikings", "New York Giants", "New England Patriots", "New York Jets"
             , "Arizona Cardinals", "Atlanta Falcons", "Baltimore Ravens", "Buffalo Bills",
@@ -100,6 +105,21 @@ class ChatWithFriendsButton {
         goToChat(this.chatId, true);
     }
 }
+
+class GameHubButton {
+    constructor(index, gameHubButtons) {
+        this.index = index;
+        this.gameHubButtons = gameHubButtons;
+        const btn = gameHubButtons[index];
+        btn.addEventListener('click', this);
+        console.log(btn);
+        this.gameId = btn.childNodes[1].childNodes[1].childNodes[1].firstChild.innerHTML;
+        console.log(this.gameId);
+    }
+    handleEvent(event) {
+        goToGamePage(this.gameId);
+    }
+}
                     
 // Get live game information from the NFL
 function getScore(i) {
@@ -127,5 +147,15 @@ function goToChat(team, isFriendsChat) {
         } else {
             setTimeout(() => { location.href= "chatspage.html?team=" + team.replace(" ", "_"); }, 500);
         }
+    }
+}
+
+// Go to chat if user is signed in
+function goToGamePage(gameId) {
+    var user = firebase.auth().currentUser;
+    console.log(user.email);
+    console.log(gameId);
+    if (user) {
+        setTimeout(() => { location.href= "gamepage.html?game=" + gameId.replace(" ", "_"); }, 500);
     }
 }

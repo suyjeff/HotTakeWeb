@@ -103,12 +103,9 @@
         db.collection("users").doc(email).get().then(function(doc) {
             if (doc.exists) {
                 console.log(doc.data().teams);
-                for (var i = 0; i < teams.length; i++) {
-                    if (teams[i] == doc.data().team) {
-                        playerTeamAbbreviation = teamsAbbreviated[i];
-                        getScore();
-                    }
-                }
+                playerTeamAbbreviation = window.location.search.substring(6).replace("_", " ").replace("%20", " ");
+                console.log(playerTeamAbbreviation);
+                getScore();
             }
         }).catch(function(error) {
             console.error("Error getting user info: ", error);
