@@ -36,12 +36,14 @@
                 </div>
                 <p class="subtitle">Member of</p>
                 <!-- Add list of teams/chats they are a part of here -->
-                <div class="chat-list-item" onclick="location.href='chatspage.html';">
-                    <img class="team-image" src="" alt="Team Image">
-                    <div>
-                        <p class="team-name">Team Name</p>
-                        <p class="members">Fan Hub</p>
-                    </div>
+                <div id="chat-list">
+                    <!-- <div class="chat-list-item" onclick="location.href='chatspage.html';">
+                        <img class="team-image" src="" alt="Team Image">
+                        <div>
+                            <p class="team-name">Team Name</p>
+                            <p class="members">Fan Hub</p>
+                        </div>
+                    </div> -->
                 </div>
                 <p class="subtitle">Friends</p>
                 <!-- Add friends list here -->
@@ -132,6 +134,7 @@
     var db = firebase.firestore();
     var storageRef;
     var requests;
+    var playerTeamAbbreviation = [];
 
     // Firebase observer
     firebase.auth().onAuthStateChanged(function(user) {
@@ -141,14 +144,30 @@
         console.log(user);
         db.collection("users").doc(email).get().then(function(doc) {
             if (doc.exists) {
-                document.getElementsByClassName("team-name")[0].innerHTML = doc.data().team;
-                document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().team + ".png";
-                // for (var i = 0; i < teams.length; i++) {
-                //     if (teams[i] == doc.data().team) {
-                //         playerTeamAbbreviation = teamsAbbreviated[i];
-                //         getScore();
-                //     }
-                // }
+                console.log(doc.data().teams);
+                var teamsArray = doc.data().teams;
+                // document.getElementsByClassName("team-name")[0].innerHTML = doc.data().teams[0];
+                // document.getElementsByClassName("team-image")[0].src = "assets/team_images/" + doc.data().teams[0] + ".png";
+                // Loop through all of user's teams and show scorecards and chat buttons
+                for (var i = 0; i<teamsArray.length; i++) {
+                    addChatButton(i);
+                    // Populate chat buttons
+                    document.getElementsByClassName("team-name")[i].innerHTML = doc.data().teams[i];
+                    document.getElementsByClassName("team-image")[i].src = "assets/team_images/" + doc.data().teams[i] + ".png";          
+                    for (var j = 0; j < teams.length; j++) {
+                        if (teams[j] == doc.data().teams[i]) {
+                            playerTeamAbbreviation.push(teamsAbbreviated[j]);
+                            getScore(i);
+                        }
+                    }
+                }
+                var teamButtons = document.getElementsByClassName("chat-list-item");
+                console.log(teamButtons);
+                // Event listener for team buttons
+                for(var i = 0; i < teamButtons.length; i++) {
+                    console.log(teamButtons[i]);
+                    new ChatTeamButton(i, teamButtons);
+                }
                 console.log(email);
                 document.getElementsByClassName("profile-name")[0].innerHTML = email;
                 if (user.displayName != null) {
@@ -435,5 +454,18 @@
             // Hide options for making a chat with friends if currently visible
             document.getElementById("create-friends-chat").innerHTML = "";
         }
+    }
+
+    function addChatButton(index) {
+        document.getElementById("chat-list").innerHTML +=
+        `
+        <div class="chat-list-item">
+            <img class="team-image" src="" alt="Team Image">
+            <div>
+                <p class="team-name">Team Name</p>
+                <p class="members">Fan Hub</p>
+            </div>
+        </div>
+        `
     }
 </script>
