@@ -446,6 +446,7 @@
                             chatsWithFriends: firebase.firestore.FieldValue.arrayUnion(chatId)
                         }, { merge: true }).then(function() {
                             console.log("Document successfully written!");
+                            setTimeout(() => { location.href= "userpage.html"; }, 200);
                         }).catch(function(error) {
                             console.error("Error writing document: ", error);
                         });
