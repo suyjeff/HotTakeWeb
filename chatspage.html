@@ -260,11 +260,47 @@
 
         // Get and display score of most recent game for current team
         getScore();
+        if (friendsChat) {
+            document.getElementsByClassName("scorecard")[0].innerHTML = "";
+            document.getElementsByClassName("scorecard")[0].style.height = "150px";
+            document.getElementsByClassName("scorecard")[0].style.backgroundColor = "black";
+            var friendsText = document.createElement("p");
+            var friendsArray = chatTeam.split(",");
+            friendsArray.pop();
+            console.log(friendsArray.length)
+            console.log(friendsArray);
+            friendsText.innerHTML="Chat with:";
+            friendsText.className="friends-chat-info"
+            var friendsList = document.createElement("div");
+            friendsList.className="friends-chat-list"
+            var endIteration = friendsArray.length;
+            var extraFriends = 0;
+            if (endIteration > 3) {
+                endIteration = 3;
+                extraFriends = friendsArray.length - 3;
+            }
+            for (var i =0; i < endIteration; i++) {
+                var friendItem = document.createElement("p");
+                friendItem.innerHTML = friendsArray[i];
+                friendItem.className="friends-chat-item";
+                friendsList.appendChild(friendItem);
+            }
+            if (friendsArray.length > endIteration) {
+                var friendItem = document.createElement("p");
+                friendItem.innerHTML = "and " + extraFriends + " more...";
+                friendItem.className="friends-chat-item";
+                friendsList.append(friendItem);
+            }
+            console.log(friendsList)
+            document.getElementsByClassName("scorecard")[0].appendChild(friendsText);
+            document.getElementsByClassName("scorecard")[0].appendChild(friendsList);
+        }
     } 
     });
 
     // Display live game information from NFL
     function displayScore(results) {
+        console.log("IN DISPLAY SCORE");
         resultsList = results.getElementsByTagName("g");
         for (var i = 0; i < resultsList.length; i++) {
             result = resultsList[i];
