@@ -34,7 +34,7 @@
                         <p class="profile-name"></p>
                     </div>
                 </div>
-                <p class="subtitle">Your Teams</p>
+                <p class="subtitle small-marg">Your Teams</p>
                 <!-- Add list of teams/chats they are a part of here -->
                 <div id="chat-list">
                     <!-- <div class="chat-list-item" onclick="location.href='chatspage.html';">
@@ -45,9 +45,9 @@
                         </div>
                     </div> -->
                 </div>
-                <p class="subtitle">Friends</p>
+                <p class="subtitle small-marg">Friends</p>
                 <!-- Add friends list here -->
-                <div class="chat-list-item">
+                <div class="chat-list-item" style="padding: 0;">
                     <div id="friends-div"> 
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div id="requests-sent">
                     <p class="subtitle">Friend Requests Sent</p>
                     <!-- Add list of sent friend requests here -->
-                    <div class="chat-list-item">
+                    <div class="chat-list-item" style="border-bottom: none !important;">
                         <div id="friend-requests-sent-div"> 
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                 <div id="requests-received">
                     <p class="subtitle">Friend Requests Received</p>
                     <!-- Add list of received friend requests here -->
-                    <div class="chat-list-item">
+                    <div class="chat-list-item" style="padding: 0;">
                         <div id="friend-requests-received-div"> 
                         </div>
                     </div>
@@ -327,7 +327,7 @@
 
     // Make friend request
     function requestFriend() {
-        var givenFriendName = prompt("Enter email of user to send friend request to: ", "");
+        var givenFriendName = prompt("Enter the user's email to send a request: ", "");
         if (givenFriendName != null && givenFriendName != "") {
             // Send friend request
             const user = firebase.auth().currentUser;
