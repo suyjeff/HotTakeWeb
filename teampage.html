@@ -297,7 +297,7 @@
 		function getTeamNews() {
 			$.ajax({
 				type: "GET",
-				url: "http://site.api.espn.com/apis/site/v2/sports/football/nfl/news?region=us&lang=en&contentorigin=espn&limit=99",
+				url: "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news?region=us&lang=en&contentorigin=espn&limit=99",
 				success: function(allNewsResults) {
 					let newsArrays = allNewsResults.articles;
 					for (let i=0; i<newsArrays.length; i++) {

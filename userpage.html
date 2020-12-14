@@ -81,7 +81,7 @@
                 </div>
                 <p class="subtitle">Preferences</p>
                 <div id="settings-container">
-                    <button class="settings-button" id="change-team-button">Change Team</button>
+                    <button class="settings-button" id="change-team-button">Change Teams</button>
                     <button class="settings-button" id="change-name-button">Change Display Name</button>
                     <label for="pfpInput" class="settings-button">
                         Change Avatar
@@ -347,6 +347,7 @@
                     friendRequestsReceived: firebase.firestore.FieldValue.arrayUnion(user.email)
                 }, { merge: true }).then(function() {
                     console.log("Document successfully written!");
+                    setTimeout(() => { location.href= "userpage.html"; }, 200);
                 }).catch(function(error) {
                     console.error("Error writing document: ", error);
                 });
@@ -376,6 +377,7 @@
             }, { merge: true }).then(function() {
                 console.log("Document successfully written!");
                 window.alert("Friend added :)");
+                setTimeout(() => { location.href= "userpage.html"; }, 200);
             }).catch(function(error) {
                 console.error("Error writing document: ", error);
             });
